@@ -6,7 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 class Bus_agency(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    name=models.CharField(max_length=100)
+    name=models.CharField(max_length=100,unique=True)
     agent_id=models.AutoField(primary_key=True)
 
     address=models.CharField( max_length=300)
@@ -23,7 +23,21 @@ class Bus_agency(models.Model):
 
 class Bus(models.Model):
         agency=models.ForeignKey(Bus_agency, on_delete=models.CASCADE)
-        Bus_type=models.IntegerField(default=1)
+        bus_type_choice = (
+        ('Sleeper', 'Sleeper'),
+        ('Normal', 'Normal'),
+
+                            )
+        bus_model_choice = (
+        ('scania','scania'),
+        ('volvo', 'volvo'),
+        ('Normal', 'Normal'),
+
+                            )
+
+
+        Bus_type=models.CharField(choices=bus_type_choice,max_length=20)
+        Bus_model=models.CharField(choices=bus_model_choice,max_length=20,null=True)
         costperkm=models.FloatField()
         serviceno=models.IntegerField()
         noseats=models.IntegerField(default=0)

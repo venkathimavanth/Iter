@@ -1,0 +1,37 @@
+from django import forms
+from bus_booking.models  import Bus_agency,Bus
+
+class agency_details(forms.Form):
+
+    name=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
+    address=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
+    phone_number = forms.CharField(min_length=1, max_length=100, required=True, widget=forms.TextInput())
+    email=forms.EmailField()
+
+    class Meta:
+        model = Bus_agency
+        fields = ['name','address','phone_number','email']
+
+class bus_details(forms.Form):
+    bus_type_choice = (
+        ('Sleeper', 'Sleeper'),
+        ('Normal', 'Normal'),
+
+                            )
+    bus_model_choice = (
+        ('scania','scania'),
+        ('volvo', 'volvo'),
+        ('Normal', 'Normal'),
+
+                            )
+    bus_type=forms.ChoiceField(choices = bus_type_choice, label="", initial='', widget=forms.Select(), required=True)
+    bus_model=forms.ChoiceField(choices = bus_model_choice, label="", initial='', widget=forms.Select(), required=True)
+    costperkm=forms.FloatField(required=True,widget=forms.TextInput())
+    serviceno=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
+    noseats=forms.IntegerField(required=True,widget=forms.TextInput())
+    start_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
+    destination_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
+
+    class Meta:
+        model = Bus
+        fields = ['bus_type','bus_model','costperkm','serviceno','noseats','start_city','destination_city']
