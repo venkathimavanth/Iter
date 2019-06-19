@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import agency_details,bus_details
-from bus_booking.models import Bus_agency,Bus
+from bus_booking.models import Bus_agency,Bus,via
 from django.contrib.auth.models import User
 from user_authentication.models import Profile
 from django.contrib.auth.decorators import login_required
@@ -43,3 +43,39 @@ def add_bus(request):
     else:
         form=bus_details()
         return render(request,'bus_vendor/bus_details.html',{'form':form})
+
+def add_via(request):
+    if request.method=='POST':
+
+        print(request.user)
+
+        form=via(request.POST,request.user)
+        if form.is_valid():
+            bus=Bus.objects.get(serviceno=form.cleaned_data.get('serviceno'))
+            place_name=form.cleaned_data.get('place_name')
+            reach_date=form.cleaned_data.get('reach_date')
+            reach_time=form.cleaned_data.get('reach_time')
+            start_date=form.cleaned_data.get('start_date')
+            start_time=form.cleaned_data.get('start_time')
+
+            data=via.objects.create(place_name=place_name,reach_date=reach_date,reach_time=reach_time,start_time=start_time,start_date=start_date,bus=bus)
+            data.save()
+            seats_available
+            bus=Bus.objects.get(serviceno=form.cleaned_data.get('serviceno'))
+            n=bus.noseats
+            via=via.objects.get(bus=bus)
+            j=0
+            for i in via:
+                j=j+1
+            k=''
+            l = 0
+            for l in range(n):
+                k='.'*j
+                k=k+','
+            bus.seats_available=k
+            bus.save()
+
+        return render(request,'bus_vendor/home.html')
+    else:
+        form=via()
+        return render(request,'bus_vendor/via.html',{'form':form})

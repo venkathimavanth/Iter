@@ -1,5 +1,5 @@
 from django import forms
-from bus_booking.models  import Bus_agency,Bus
+from bus_booking.models  import Bus_agency,Bus,via
 
 class agency_details(forms.Form):
 
@@ -31,7 +31,24 @@ class bus_details(forms.Form):
     noseats=forms.IntegerField(required=True,widget=forms.TextInput())
     start_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
     destination_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
+    startdate=forms.DateField()
+    start_time=forms.IntegerField(required=True,widget=forms.TextInput())
+    reach_time=forms.IntegerField(required=True,widget=forms.TextInput())
+    reachdate=forms.DateField()
+
 
     class Meta:
         model = Bus
-        fields = ['bus_type','bus_model','costperkm','serviceno','noseats','start_city','destination_city']
+        fields = ['bus_type','bus_model','costperkm','serviceno','noseats','start_city','destination_city','startdate','start_time','reach_time','reachdate']
+
+class via(forms.Form):
+    place_name=forms.CharField()
+    reach_date=forms.DateField()
+    reach_time=forms.IntegerField(required=True,widget=forms.TextInput())
+    start_date=forms.DateField()
+    start_time=forms.IntegerField(required=True,widget=forms.TextInput())
+    distance_from_startcity=forms.FloatField()
+
+    class Meta:
+        model = via
+        fields = ['place_name','reach_date','reach_time','start_date','start_time','distance_from_startcity']
