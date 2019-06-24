@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.urls import reverse
 
 # Create your models here.
 class Bus_agency(models.Model):
@@ -48,6 +49,11 @@ class Bus(models.Model):
         start_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)],default=0)
         reach_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)],default=0)
         reachdate=models.DateField()
+
+        def get_absolute_url(self):
+            return reverse('bus_detail',kwargs={'id' : self.id})
+
+
 
 class via(models.Model):
     bus=models.ForeignKey(Bus,on_delete=models.CASCADE)

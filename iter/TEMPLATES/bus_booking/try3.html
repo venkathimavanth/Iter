@@ -1,0 +1,108 @@
+{% load static%}
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-map.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<link href="https://cdn.anychart.com/playground-css/seat-map/seat-map-title.css" type="text/css" rel="stylesheet">
+<link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css?hcode=be5162d915534272a57d0bb781d27f2b" type="text/css" rel="stylesheet">
+<link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css?hcode=be5162d915534272a57d0bb781d27f2b" type="text/css" rel="stylesheet">
+<style type="text/css">
+html, body, #container {
+width: 50%;
+height: 100%;
+margin: 0;
+padding: 0;
+}
+</style>
+</head>
+<body>
+  
+<div id="container"></div>
+<script>
+anychart.onDocumentReady(function () {
+var stage = acgraph.create('container');
+
+$('#container').append('<div class="seat-map-title">' +
+'<h1>Reservation of seats in Chamber theatre.</h1>' +
+'<p>Source <a href="https://cdn.anychart.com/svg-data/' +
+'seat-map/theater.svg"' +
+'target="_blank">SVG Image</a></p>' + '</div>');
+
+// get svg file
+$.ajax({
+type: 'GET',
+url: '	http://127.0.0.1:8000/static/bus_booking/buscopy.svg',
+// The data that have been used for this sample can be taken from the CDN
+// load SVG image using jQuery ajax
+success: function (svgData) {
+// Data for creating a SeatMap
+var chart = anychart.seatMap([
+  {id: "_x31_", value: "1"},
+  {id: "_x32_", value: "2"},
+  {id: "_x33_", value: "3"},
+  {id: "_x34_", value: "4"},
+  {id: "_x35_", value: "5"},
+  {id: "_x36_", value: "6"},
+  {id: "_x37_", value: "7"},
+  {id: "_x38_", value: "8"},
+  {id: "_x39_", value: "9"},
+  {id: "_x31_0", value: "10"},
+  {id: "_x31_1", value: "11"},
+  {id: "_x31_2", value: "12"},
+  {id: "_x31_3", value: "13"},
+  {id: "_x31_4", value: "14"},
+  {id: "_x31_5", value: "15"},
+  {id: "_x31_6", value: "16"},
+  {id: "_x31_7", value: "17"},
+  {id: "_x31_8", value: "18"},
+  {id: "_x31_9", value: "19"},
+  {id: "_x32_0", value: "20"},
+  {id: "_x32_1", value: "21"},
+  {id: "_x32_2", value: "22"},
+  {id: "_x32_3", value: "23"},
+  {id: "_x32_4", value: "24"},
+  {id: "_x32_5", value: "25"},
+  {id: "_x32_6", value: "26"},
+  {id: "_x32_7", value: "27"},
+  {id: "_x32_8", value: "28"},
+  {id: "_x32_9", value: "29"},
+  {id: "_x33_0", value: "30"},
+  {id: "_x33_1", value: "31"},
+  {id: "_x33_2", value: "32"},
+  {id: "_x33_3", value: "33"},
+  {id: "_x33_4", value: "34"},
+  {id: "_x33_5", value: "35"},
+  {id: "_x33_6", value: "36"},
+  {id: "_x33_7", value: "37"},
+  {id: "_x33_8", value: "38"},
+  {id: "_x33_9_1_", value: "39"},
+  {id: "_x34_0", value: "40"},
+]);
+
+chart.background().stroke("5 black");
+// set svg data
+chart.geoData(svgData);
+chart.padding([70, 20, 50, 20]);
+
+// create chart legend
+chart.legend()
+.enabled(true)
+// items source mode categories
+.itemsSourceMode('categories')
+.position('right')
+.itemsLayout('vertical');
+
+// set container id for the chart
+chart.container(stage);
+// initiate chart drawing
+chart.draw();
+}
+});
+});
+</script>
+</body>
+</html>
