@@ -31,6 +31,7 @@ urlpatterns = [
 #    path('tripplanner/', include('trip_planner.urls')),
     path('signup/',views.signup,name="signup"),
     path('login/',views.user_login,name='login'),
+    path('trip/',include('trip_planner.urls')),
     path('logout/',auth_views.LogoutView.as_view(template_name='user_authentication/home.html'),name='logout'),
     path('reset-password/', PasswordResetView.as_view(template_name='user_authentication/password_reset_form.html',
                                                         email_template_name="user_authentication/reset_password_email.html",

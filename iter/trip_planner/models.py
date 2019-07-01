@@ -25,3 +25,12 @@ class Trip(models.Model):
     end_date=models.DateField()
     start_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
     end_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
+
+class Distances(models.Model):
+    start=models.CharField(max_length=200)
+    dest=models.CharField(max_length=200)
+    distance=models.FloatField(default=0)
+    time=models.FloatField(default=0)
+    city=models.CharField(max_length=50)
+    state=models.CharField(max_length=50)
+    country=models.CharField(max_length=50)
