@@ -26,8 +26,11 @@ from user_authentication import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('userauth/', include('user_authentication.urls')),
+    path('hotel_vendor/', include('hotel_vendor.urls')),
+    path('bus_vendor/', include('bus_vendor.urls')),
+
 #    path('hotelbooking/',include('hotel_booking.urls')),
-#    path('busbooking/',include('bus_booking.urls')),
+    path('busbooking/',include('bus_booking.urls')),
 #    path('tripplanner/', include('trip_planner.urls')),
     path('signup/',views.signup,name="signup"),
     path('login/',views.user_login,name='login'),

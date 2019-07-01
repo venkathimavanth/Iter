@@ -8,7 +8,10 @@ class Hotels(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
     hotel_id=models.AutoField(primary_key=True)
-    address=models.CharField( max_length=300)
+    address=models.CharField( max_length=300,null=True)
+    city=models.CharField( max_length=30,null=True)
+    state=models.CharField( max_length=30,null=True)
+    country=models.CharField( max_length=30,null=True)
     phone_number= models.CharField(max_length=10,
                                     validators=[
                                         RegexValidator(
@@ -24,14 +27,15 @@ class Hotels(models.Model):
 class Rooms(models.Model):
     hotel_id=models.ForeignKey(Hotels, on_delete=models.CASCADE)
     room_type=models.IntegerField(default=1)
+    room_fac=models.IntegerField(default=1)
+    price=models.FloatField()
     cost=models.FloatField()
-    discount=models.FloatField()
     availability=models.IntegerField(default=0)
     capacity=models.IntegerField(default=0)
 
 class Hotel_Booking(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     name=models.CharField(max_length=100)
     gender=models.CharField(max_length=1)
     age=models.IntegerField()
