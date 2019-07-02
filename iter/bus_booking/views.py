@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from .forms import passenger_details,bus_search
-from bus_booking.models import passenger,Bus_Booking,Bus
+from bus_booking.models import passenger,Bus_Booking,Bus,via,bus_dates
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import random
 import string
+import json
+from django.forms import formset_factory
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -22,65 +24,343 @@ def gen_booking_id(request):
 
 
 @login_required
-def passenger_details(request):
+def passengerdetails(request):
+    print('true')
     if request.method=='POST':
-        booking_id=gen_booking_id()
-        form=passenger_details(request.POST,request.user)
-        if form.is_valid():
-            name=form.cleaned_data.get('name')
-            gender=form.cleaned_data.get('gender')
-            age=form.cleaned_data.get('age')
-            seatno=1
-            data=passenger.objects.create(name=name,gender=gender,age=age,seatno=seatno,booking_id=booking_id)
-            data.save()
+        print('false')
+        booking_id=gen_booking_id(request)
+        print(booking_id)
+        bus=Bus.objects.get(serviceno=request.session['pk'])
+        v=via.objects.filter(bus=bus)
+        if bus.start_city==request.session['start_city']:
+            start=bus.start
+
+
+        if bus.destination_city==request.session['destination_city']:
+            reach=bus.reach
+        for a in v:
+            if a.place_name==request.session['start_city']:
+                start=a.reach
+            if a.place_name==request.session['destination_city']:
+                reach=a.reach
+        data1=Bus_Booking.objects.create(bus_type=bus.Bus_type,Bus_model=bus.Bus_model,start_city=request.session['start_city'],destination_city=request.session['destination_city'],bus_start_date=bus.date,start=start,reach=reach,serviceno=bus,booking_id=booking_id,phone_number='8179033301',user=request.user)
+        data1.save()
+        formi=formset_factory(passenger_details)
+        forma=formi(request.POST)
+        print(request.POST)
+        s=request.session['seats_selected']
+        n=-1
+        if forma.is_valid():
+            print('true')
+            for f in forma:
+                print(f)
+                n=n+1
+                name=f.cleaned_data.get('name')
+                gender=f.cleaned_data.get('gender')
+                age=f.cleaned_data.get('age')
+                seatno=s[n]
+                bok=Bus_Booking.objects.get(booking_id=booking_id)
+                data=passenger.objects.create(name=name,gender=gender,age=age,seatno=seatno,booking_id=bok)
+                data.save()
+        print(forma.errors)
         return render(request,'bus_booking/home.html')
     else:
-        form=passenger_details()
+        j=request.session['noss']
+        form = formset_factory(passenger_details, extra=j-1, min_num=1)
+        print('true')
         return render(request,'bus_booking/passenger_details.html',{'form':form})
 
 def buses(request):
     if request.method=='POST':
         print("posted")
-        form = bus_search(request.POST,request.user)
+        form = bus_search(request.POST)
+
         if form.is_valid():
             start_city=form.cleaned_data.get('start_city')
             destination_city=form.cleaned_data.get('destination_city')
             start_date=form.cleaned_data.get('start_date')
-            buses=Bus.objects.filter(start_date=start_date)
+            request.session['start_city']=start_city
+            request.session['destination_city']=destination_city
+            print(start_date)
+            request.session['start_date']=str(start_date)
+
+
+            print(start_date)
+            bus=Bus.objects.get(serviceno="12346")
+            print("agency/n")
+            print(bus.agency.name)
+            buses=Bus.objects.all()
+            print(buses)
             bus_list=[]
             for x in buses:
                 if x.destination_city==destination_city and x.start_city==start_city:
-                    bus_list.append(x)
+                    if x.start.date()==start_date:
+                        d=x.costperkm * x.distance_from_startcity
+                        t=x.reach-x.start
+                        t1=t.days*24+t.seconds//3600
+                        t2=(t.seconds % 3600) // 60
 
-                elif x.via:
+                        bus_list.append([x,d,x.start.time(),x.reach.time(),t1,t2])
+
+                elif via.objects.filter(bus=x):
+                    print('true1')
                     y=via.objects.filter(bus=x)
                     for z in y:
                         for a in y:
                             if z.place_name==start_city and a.place_name==destination_city:
-                                bus_list.append(x)
+                                if (a.distance_from_startcity - z.distance_from_startcity) > 0:
+                                    if z.reach.date()==start_date:
+                                        d=(x.costperkm) * (a.distance_from_startcity - z.distance_from_startcity)
+                                        t=a.reach-z.reach
+                                        t1=t.days*24+t.seconds//3600
+                                        t2=(t.seconds % 3600) // 60
+                                        bus_list.append([x,d,z.reach.time(),a.reach.time(),t1,t2])
 
                     for z in y:
 
                         if (x.start_city==start_city and z.place_name==destination_city) or (x.destination_city==destination_city and z.place_name==start_city):
-                            bus_list.append(x)
-            return render(request,'bus_booking/buses.html',{'form':bus_list})
+                            if x.start_city==start_city:
+                                if x.start.date()==start_date:
+                                    d=(x.costperkm) * (z.distance_from_startcity)
+                                    t=x.start-z.reach
+                                    t1=t.days*24+t.seconds//3600
+                                    t2=(t.seconds % 3600) // 60
+                                    bus_list.append([x,d,x.start.time(),z.reach.time(),t1,t2])
+                            elif x.destination_city==destination_city:
+                                print('true')
+                                if z.reach.date()==start_date:
+                                    d=(x.costperkm) * (x.distance_from_startcity - z.distance_from_startcity)
+                                    t=z.reach-x.reach
+                                    t1=t.days*24+t.seconds//3600
+                                    t2=(t.seconds % 3600) // 60
+
+                                    bus_list.append([x,d,z.reach.time(),x.reach.time(),t1,t2])
+
+
+            print(bus_list)
+            return render(request,'bus_booking/search.html',{'bus':bus_list,'form':form} )
 
 
         else:
+            print(form.errors)
             print('form1')
             form = bus_search()
-            return render(request,'bus_booking/search.html',{'form':form})
+            return render(request,'bus_booking/search.html',{'form':form,'bus':0})
     else:
         print('form')
         form = bus_search()
-        return render(request,'bus_booking/search.html',{'form':form})
+        return render(request,'bus_booking/search.html',{'form':form,'bus':0})
 
 def test(request):
-    return render(request,'bus_booking/try3.html')
+    if request.method == "POST":
+        temp=request.POST["seats_text"]
+        print(temp)
+        return render(request,'bus_booking/passenger_details.html')
+    else:
+        ddata=[
+          ["_x31_", '1',"1","1",'availabe','#fff'],
+        [ "_x32_", "2","1","2",'availabe','#fff'],
+        ["_x33_", "3","1","3",'availabe','#fff'],
+        ["_x34_","4","1","4",'availabe','#fff'],
+        ["_x35_","5","2","1",'availabe','#fff'],
+        ["_x36_","6","2","2",'availabe','#fff'],
+        ["_x37_","7","2","3",'availabe','#fff'],
+        ["_x38_","8","2","4",'availabe','#fff'],
+        ["_x39_", "9","3","1",'availabe','#fff'],
+        ["_x31_0","10","3","2",'availabe','#fff'],
+        ["_x31_1","11","3","3",'availabe','#fff'],
+        ["_x31_2","12","3","4",'availabe','#fff'],
+        ["_x31_3","13","4","1",'availabe','#fff'],
+        [ "_x31_4","14","4","2",'availabe','#fff'],
+        ["_x31_5","15","4","3",'availabe','#fff'],
+        [ "_x31_6", "16","4","4",'availabe','#fff'],
+        ["_x31_7","17","5","1",'availabe','#fff'],
+        ["_x31_8","18","5","2",'availabe','#fff'],
+        [ "_x31_9","19","5","3",'availabe','#fff'],
+        ["_x32_0", "20","5","4",'availabe','#fff'],
+        ["_x32_1", "21","6","1",'availabe','#fff'],
+        ["_x32_2","22","6","2",'availabe','#fff'],
+        ["_x32_3","23","6","3",'availabe','#fff'],
+        ["_x32_4",  "24","6","4",'availabe','#fff'],
+        ["_x32_5","25","7","1",'availabe','#fff'],
+        ["_x32_6","26","7","2",'availabe','#fff'],
+        ["_x32_7","27","7","3",'availabe','#fff'],
+        [ "_x32_8", "28","7","4",'availabe','#fff'],
+        ["_x32_9", "29","8","1",'availabe','#fff'],
+        ["_x33_0","30","8","2",'availabe','#fff'],
+        [ "_x33_1","31","8","3",'availabe','#fff'],
+        ["_x33_2","32","8","4",'availabe','#fff'],
+        [ "_x33_3","33","9","1",'availabe','#fff'],
+        ["_x33_4","34","9","2",'availabe','#fff'],
+         ["_x33_5","35","9","3",'availabe','#fff'],
+        ["_x33_6","36","9","4",'availabe','#fff'],
+        ["_x33_7", "37","10","1",'availabe','#fff'],
+        ["_x33_8","38","10","2",'availabe','#fff'],
+        ["_x33_9_1_","39","10","3",'availabe','#fff'],
+        ["_x34_0", "40","10","4",'availabe','#fff'],
+
+        ]
+
+        json_list = json.dumps(ddata)
+        return render(request,'bus_booking/try3.html',{'json_list':json_list})
 
 
+def bus_detail(request,pk):
+    ddata=[
+              ["_x31_", '1',"1","1",'availabe','#fff'],
+            [ "_x32_", "2","1","2",'availabe','#fff'],
+            ["_x33_", "3","1","3",'availabe','#fff'],
+            ["_x34_","4","1","4",'availabe','#fff'],
+            ["_x35_","5","2","1",'availabe','#fff'],
+            ["_x36_","6","2","2",'availabe','#fff'],
+            ["_x37_","7","2","3",'availabe','#fff'],
+            ["_x38_","8","2","4",'availabe','#fff'],
+            ["_x39_", "9","3","1",'availabe','#fff'],
+            ["_x31_0","10","3","2",'availabe','#fff'],
+            ["_x31_1","11","3","3",'availabe','#fff'],
+            ["_x31_2","12","3","4",'availabe','#fff'],
+            ["_x31_3","13","4","1",'availabe','#fff'],
+            [ "_x31_4","14","4","2",'availabe','#fff'],
+            ["_x31_5","15","4","3",'availabe','#fff'],
+            [ "_x31_6", "16","4","4",'availabe','#fff'],
+            ["_x31_7","17","5","1",'availabe','#fff'],
+            ["_x31_8","18","5","2",'availabe','#fff'],
+            [ "_x31_9","19","5","3",'availabe','#fff'],
+            ["_x32_0", "20","5","4",'availabe','#fff'],
+            ["_x32_1", "21","6","1",'availabe','#fff'],
+            ["_x32_2","22","6","2",'availabe','#fff'],
+            ["_x32_3","23","6","3",'availabe','#fff'],
+            ["_x32_4",  "24","6","4",'availabe','#fff'],
+            ["_x32_5","25","7","1",'availabe','#fff'],
+            ["_x32_6","26","7","2",'availabe','#fff'],
+            ["_x32_7","27","7","3",'availabe','#fff'],
+            [ "_x32_8", "28","7","4",'availabe','#fff'],
+            ["_x32_9", "29","8","1",'availabe','#fff'],
+            ["_x33_0","30","8","2",'availabe','#fff'],
+            [ "_x33_1","31","8","3",'availabe','#fff'],
+            ["_x33_2","32","8","4",'availabe','#fff'],
+            [ "_x33_3","33","9","1",'availabe','#fff'],
+            ["_x33_4","34","9","2",'availabe','#fff'],
+             ["_x33_5","35","9","3",'availabe','#fff'],
+            ["_x33_6","36","9","4",'availabe','#fff'],
+            ["_x33_7", "37","10","1",'availabe','#fff'],
+            ["_x33_8","38","10","2",'availabe','#fff'],
+            ["_x33_9_1_","39","10","3",'availabe','#fff'],
+            ["_x34_0", "40","10","4",'availabe','#fff'],
 
-def bus_detail(request,primary_key):
-    if primary_key:
-        bus=Bus.object.get(serviceno=primary_key)
-        return render(request,'bus_booking/bus_detail.html',{'bus':bus})
+
+            ]
+
+    if request.method == "POST":
+        print('posted')
+
+        temp=request.POST["seats_text"]
+        print(temp)
+        temp=temp.split(',')
+        print(temp)
+        for i in range(len(temp)):
+            temp[i]=temp[i].split('-')
+        print(temp)
+        p=temp.pop()
+        for i in temp:
+            print(i[0])
+        bus=Bus.objects.get(serviceno=request.session['pk'])
+        viacount=via.objects.filter(bus=bus).count()
+        print(viacount)
+        vias=via.objects.filter(bus=bus).order_by('reach')
+        print(vias)
+
+        request.session['seat']=temp
+        print(temp)
+        j=0
+        seats_selected=[]
+        for i in temp:
+            if i[1]=='selected':
+                seats_selected.append(i[0])
+                j=j+1
+        print(j)
+        request.session['noss']=j
+        request.session['seats_selected']=seats_selected
+        form = formset_factory(passenger_details, extra=j-1, min_num=1)
+
+        return render(request,'bus_booking/passenger_details.html',{'form':form})
+
+    elif pk:
+
+        bus=Bus.objects.get(serviceno=pk)
+        print(bus.start)
+        vias=via.objects.filter(bus=pk).order_by('reach')
+        print(vias)
+        via_names=[]
+        for a in vias:
+            via_names.append(a.place_name)
+        if request.session['start_city']==bus.start_city:
+            if request.session['destination_city']==bus.destination_city:
+                bookings=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+            else:
+                bookings=[]
+                for a in vias:
+                    if request.session['destination_city']==a.place_name:
+                        vias=list(vias)
+                        index=vias.index(a)
+                        booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+                        for b in booking:
+                            if b.start_city in via_names[index:]:
+                                pass
+                            else:
+                                bookings.append(b)
+        elif request.session['destination_city']==bus.destination_city:
+            bookings=[]
+            for p in vias:
+                if request.session['start_city']==p.place_name:
+                    vias=list(vias)
+                    index=vias.index(p)
+                    booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+                    for b in booking:
+                        if b.destination_city in via_names[:index+1]:
+                            pass
+                        else:
+                            bookings.append(b)
+        else:
+            for p in vias:
+                if request.session['start_city']==p.place_name:
+                    vias=list(vias)
+                    index1=vias.index(p)
+            for q in vias:
+                if request.session['destination_city']==q.place_name:
+                    vias=list(vias)
+                    index2=vias.index(q)
+            booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+            for b in booking:
+                if b.start_city in via_names[:index1-1] or b.start_city==bus.start_city:
+                    if b.destination_city in via_names[:index1]:
+                        pass
+                elif b.start_city in via_names[index2:]:
+                    pass
+                else:
+                    bookings.append(b)
+
+        seats_booked=[]
+        for a in bookings:
+            b=passenger.objects.filter(booking_id=a)
+            for c in b:
+                seats_booked.append(c.seatno)
+        print(seats_booked)
+        for d in ddata:
+            if d[1] in seats_booked:
+                d[4]='booked'
+        print('before converting')
+        print(ddata)
+        print('\n')
+        for e in ddata[:]:
+            if e[4]=='booked':
+                print(e)
+                ddata.remove(e)
+        print('\n')
+        print(ddata)
+        request.session['data']=ddata
+        request.session['pk']=pk
+        request.session['seats_booked']=seats_booked
+        json_list = json.dumps(ddata)
+
+        return render(request,'bus_booking/bus_detail.html',{'json_list':json_list,'bus':bus})

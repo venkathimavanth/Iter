@@ -26,12 +26,17 @@ class Bus(models.Model):
         agency=models.ForeignKey(Bus_agency, on_delete=models.CASCADE)
         bus_type_choice = (
         ('Sleeper', 'Sleeper'),
-        ('Normal', 'Normal'),
+        ('Semi Sleeper', 'Semi Sleeper'),
+        ('Seater', 'Seater'),
+
+
 
                             )
         bus_model_choice = (
         ('scania','scania'),
         ('volvo', 'volvo'),
+        ('super luxary', 'super luxary'),
+
         ('Normal', 'Normal'),
 
                             )
@@ -40,16 +45,15 @@ class Bus(models.Model):
         Bus_type=models.CharField(choices=bus_type_choice,max_length=20)
         Bus_model=models.CharField(choices=bus_model_choice,max_length=20,null=True)
         serviceno=models.IntegerField(primary_key=True)
+        distance_from_startcity=models.FloatField(default=600)
         costperkm=models.FloatField()
-        noseats=models.IntegerField(default=0)
+        noseats=models.IntegerField(default=40)
         start_city=models.CharField(max_length=50)
         destination_city=models.CharField(max_length=50)
-        seats_available=models.CharField(max_length=60,default='?'*1000)
-        journeydate=models.DateField()
-        start_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)],default=0)
-        reach_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)],default=0)
-        reachdate=models.DateField()
-
+        seats_available=models.CharField(max_length=1000,default='?'*1000)
+        start=models.DateTimeField(null=True, blank=True)
+        reach=models.DateTimeField(null=True, blank=True)
+        date=models.DateField()
         def get_absolute_url(self):
             return reverse('bus_detail',kwargs={'id' : self.id})
 
@@ -58,25 +62,26 @@ class Bus(models.Model):
 class via(models.Model):
     bus=models.ForeignKey(Bus,on_delete=models.CASCADE)
     place_name=models.CharField(max_length=100)
-    reach_date=models.DateField()
-    reach_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
-    start_date=models.DateField()
-    start_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
     distance_from_startcity=models.FloatField()
+    reach=models.DateTimeField(null=True, blank=True)
 
+class bus_dates(models.Model):
+    bus=models.ForeignKey(Bus,on_delete=models.CASCADE)
+    date=models.DateField()
+#    booking=models.ForeignKey('Bus_Booking',on_delete=SET_NULL)
 
 
 class Bus_Booking(models.Model):
         user=models.ForeignKey(User, on_delete=models.CASCADE)
-        bus_type=models.IntegerField(default=1)
-        journeydate=models.DateField(null=True)
-        journeytime=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
-        reachdate=models.DateField(null=True)
-        reachtime=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
-        agency_id=models.ForeignKey(Bus_agency, on_delete=models.CASCADE)
-        serviceno=models.IntegerField()
+        bus_type=models.CharField(max_length=20)
+        Bus_model=models.CharField(max_length=20,null=True)
+        start_city=models.CharField(max_length=50)
+        destination_city=models.CharField(max_length=50)
+        bus_start_date=models.DateField()
+        start=models.DateTimeField(null=True, blank=True)
+        reach=models.DateTimeField(null=True, blank=True)
+        serviceno=models.ForeignKey(Bus,on_delete=models.CASCADE)
         booking_id=models.CharField(max_length=20,primary_key=True)
-        noofseats=models.CharField(max_length=5,default=1)
         phone_number = models.CharField(max_length=10,default='8179033301',
                                     validators=[
                                         RegexValidator(

@@ -9,14 +9,17 @@
   <head>
     {% block extrahead %}
     <title>Iter</title>
-    <style media="screen">
-        input{}
-    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
     {% endblock %}
     </head>
   <body>
 {% block body %}
-
+<form method="post" autocomplete="off">
+  {% csrf_token%}
     <div class="hero-wrap js-fullheight" style="background-image: url({% static 'bus_booking/images/bg_1.jpg' %});">
       <div class="overlay"></div>
       <div class="container">
@@ -31,13 +34,21 @@
             <p  data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">destination_city</a></span> </p>
             <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">{{ form.destination_city|as_crispy_field }}</p>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3" >
             <p  data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">journey Date</a></span> </p>
-            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">{{ form.start_date|as_crispy_field }}</p>
+            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }" >{{ form.start_date}}</p>
             </div>
+            <script>
+              $(function () {
+                $("#id_start_date").datepicker({
+                  format:'yyyy-mm-dd',
+                });
+              });
+            </script>
+
             <div class="col-lg-1">
               <p  data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html"></a></span> </p>
-              <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><submit type="submit" >check</submit></p>
+              <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><button type="submit" >check</button></p>
 
             </div>
 
@@ -47,18 +58,21 @@
         </div>
       </div>
     </div>
-
+</form >
 		<section class="ftco-section">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
           	<div class="row">
+              {% if bus %}
+              {% for b in bus %}
 		    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
 		    				<div class="destination">
 		    					<div class="text p-3">
 		    						<div class="d-flex">
 		    							<div class="one">
-				    						<h3><a href="#">New Orleans, LA</a></h3>
+
+				    						<h3><a href="#">{{b.0.agency.name}}</a></h3>
 				    						<p class="rate">
 				    							<i class="icon-star"></i>
 				    							<i class="icon-star"></i>
@@ -69,46 +83,38 @@
 				    						</p>
 			    						</div>
 			    						<div class="two">
-			    							<span class="price per-price">$40<br><small>/night</small></span>
+			    							<span class="price per-price">Rs{{b.1}}<br></span>
 		    							</div>
 		    						</div>
-		    						<p>Far far away, behind the word mountains, far from the countries</p>
+		    						<p>bus type :{{b.0.Bus_type}}</p>
+                    <p>bus model :{{b.0.Bus_model}}</p>
+                    <p>start time {{b.2}}</p>
+                    <p>reach time {{b.3}}</p>
 		    						<hr>
 		    						<p class="bottom-area d-flex">
-		    							<span><i class="icon-map-o"></i> Miami, Fl</span>
-		    							<span class="ml-auto"><a href="#">View</a></span>
+		    							<span><i class="icon-map-o"></i>journey time {{b.4}}:{{b.5}} hrs</span>
+		    							<span class="ml-auto"><a href="{% url 'bus_booking:bus_detail' b.0.serviceno %}">View</a></span>
 		    						</p>
 		    					</div>
 		    				</div>
 		    			</div>
-
+              {% endfor %}
+              {% elif not bus %}
+              <div class="row">
+              <div class="col-6">
+                <br>
+              <h1>SEARCH FOR BUSES</h1>
+              </div>
+              <div class="col-4">
+              <img src="{% static 'images/bus.png' %}" style="width:200px;height:auto"></img>
+              </div>
+              </div>
+              {% endif %}
           </div> <!-- .col-md-8 -->
         </div>
       </div>
     </section> <!-- .section -->
 
-		<section class="ftco-section-parallax">
-      <div class="parallax-img d-flex align-items-center">
-        <div class="container">
-          <div class="row d-flex justify-content-center">
-            <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
-              <h2>Subcribe to our Newsletter</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
-              <div class="row d-flex justify-content-center mt-5">
-                <div class="col-md-8">
-                  <form action="#" class="subscribe-form">
-                    <div class="form-group d-flex">
-                      <input type="text" class="form-control" placeholder="Enter email address">
-                      <input type="submit" value="Subscribe" class="submit px-3">
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
 
 {% endblock %}

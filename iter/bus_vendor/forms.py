@@ -15,12 +15,17 @@ class agency_details(forms.Form):
 class bus_details(forms.Form):
     bus_type_choice = (
         ('Sleeper', 'Sleeper'),
-        ('Normal', 'Normal'),
+        ('Semi Sleeper', 'Semi Sleeper'),
+        ('Seater', 'Seater'),
+
+
 
                             )
     bus_model_choice = (
         ('scania','scania'),
         ('volvo', 'volvo'),
+        ('super luxary', 'super luxary'),
+
         ('Normal', 'Normal'),
 
                             )
@@ -31,24 +36,26 @@ class bus_details(forms.Form):
     noseats=forms.IntegerField(required=True,widget=forms.TextInput())
     start_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
     destination_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
-    startdate=forms.DateField()
-    start_time=forms.IntegerField(required=True,widget=forms.TextInput())
-    reach_time=forms.IntegerField(required=True,widget=forms.TextInput())
-    reachdate=forms.DateField()
-
+    start=forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'],widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datetimepicker1'
+        }))
+    reach=forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'],widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datetimepicker2'
+        }))
 
     class Meta:
         model = Bus
-        fields = ['bus_type','bus_model','costperkm','serviceno','noseats','start_city','destination_city','startdate','start_time','reach_time','reachdate']
+        fields = ['bus_type','bus_model','costperkm','serviceno','noseats','start_city','destination_city','start','reach']
 
-class via(forms.Form):
+class via_details(forms.Form):
+    serviceno=forms.CharField()
     place_name=forms.CharField()
-    reach_date=forms.DateField()
-    reach_time=forms.IntegerField(required=True,widget=forms.TextInput())
-    start_date=forms.DateField()
-    start_time=forms.IntegerField(required=True,widget=forms.TextInput())
+    reach=forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
+
     distance_from_startcity=forms.FloatField()
 
     class Meta:
         model = via
-        fields = ['place_name','reach_date','reach_time','start_date','start_time','distance_from_startcity']
+        fields = ['place_name','reach','serviceno','distance_from_startcity']

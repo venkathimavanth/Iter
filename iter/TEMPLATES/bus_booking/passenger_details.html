@@ -1,0 +1,32 @@
+{% extends 'user_authentication/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  {% block body%}
+
+  <body>
+    <center>
+    <div class="container">
+    <form method="POST" action={% url 'bus_booking:passengerdetails' %}>
+    <h1>forms</h1>
+
+    {% csrf_token %}
+    {{ form.management_form }}
+    {%for f in form%}
+      {{f|crispy}}
+    {% endfor %}
+    <button type="submit" name="button">book</button>
+    </form>
+    </div>
+    </center>
+  </body>
+  {% endblock %}
+
+</html>
