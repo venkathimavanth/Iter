@@ -114,9 +114,12 @@ class passenger_details(forms.Form):
 
                                     )
 
-    name=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
-    age=forms.ChoiceField(choices = age_choice, initial='', widget=forms.Select(), required=True)
-    gender=forms.ChoiceField(choices = gender_choice, initial='', widget=forms.Select(), required=True)
+    name=forms.CharField(min_length=1,max_length=100,label='',required=True,widget=forms.TextInput())
+    age=forms.ChoiceField(choices = age_choice, initial='',label='', widget=forms.Select(), required=True)
+    gender=forms.ChoiceField(choices = gender_choice, initial='',label='', widget=forms.Select(attrs={
+    'class':"selection-2"
+    }
+    ), required=True)
 
 
     class Meta:

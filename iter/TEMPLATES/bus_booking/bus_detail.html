@@ -1,4 +1,4 @@
-{% extends 'user_authentication/base.html' %}
+{% extends 'bus_vendor/base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
@@ -9,7 +9,7 @@
 <head>
 {% block extrahead%}
     <meta charset="utf-8">
-    <title></title>
+    <title>ITER</title>
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
@@ -45,9 +45,6 @@
       padding: 0;
 
       }
-      nav{
-        background-color:black;
-      }
     </style>
 
 {% endblock  %}
@@ -70,9 +67,9 @@ $('nav').removeClass('black');
 
   </script>
 
-<div class=row style="margin-left:10%;margin-top:10%;height:80%;width:100%">
+<div class=row style="margin-left:10%;margin-top:1%;height:80%;width:100%">
     <div class=col id="container"></div>
-    <div class=col style="margin-left:10%;margin-top:2%;height:80%;width:100%">
+    <div class=col style="margin-left:10%;margin-top:2%;height:100%;width:100%">
       <form method="POST">
       {% csrf_token %}
 
@@ -87,7 +84,7 @@ $('nav').removeClass('black');
 
       </div><p>not available</p>
 <br>
-      <button type="submit" class="btn btn-success">confirm booking</button>
+      <button type="submit" class="btn btn-success" style="width:30%;height:30%;"><h3 style="color:white">confirm booking</h3></button>
 
       </form>
 

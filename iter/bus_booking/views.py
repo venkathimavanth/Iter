@@ -364,3 +364,17 @@ def bus_detail(request,pk):
         json_list = json.dumps(ddata)
 
         return render(request,'bus_booking/bus_detail.html',{'json_list':json_list,'bus':bus})
+
+# def bookingdetail(request,slug):
+#     bookings=Bus_Booking.objects.get(booking_id=slug)
+#     return render(request,'bus_booking/bookingdetail.html',{'bookings':bookings})
+
+
+def mybookings(request):
+    bookings=Bus_Booking.objects.filter(user=request.user)
+    dicta={}
+    for b in bookings:
+        passengers=passenger.objects.filter(booking_id=b)
+        dicta[b.booking_id]=passengers
+    print(dicta)
+    return render(request,'bus_booking/mybookings.html',{'bookings':bookings,'passengers':dicta})

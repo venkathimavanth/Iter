@@ -1,7 +1,7 @@
 from django import forms
 from bus_booking.models  import Bus_agency,Bus,via
 
-class agency_details(forms.Form):
+class agency_details(forms.ModelForm):
 
     name=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
     address=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
@@ -59,3 +59,15 @@ class via_details(forms.Form):
     class Meta:
         model = via
         fields = ['place_name','reach','serviceno','distance_from_startcity']
+
+class date_test(forms.Form):
+    monday = forms.BooleanField( widget=forms.CheckboxInput())
+    tuesday = forms.BooleanField( widget=forms.CheckboxInput())
+    wednesday = forms.BooleanField( widget=forms.CheckboxInput())
+    thursday = forms.BooleanField( widget=forms.CheckboxInput())
+    friday = forms.BooleanField( widget=forms.CheckboxInput())
+    saturday = forms.BooleanField( widget=forms.CheckboxInput())
+    sunday = forms.BooleanField( widget=forms.CheckboxInput())
+
+class dateform(forms.Form):
+    date=forms.DateField(input_formats=['%Y-%m-%d'])

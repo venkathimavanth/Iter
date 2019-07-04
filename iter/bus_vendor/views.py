@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .forms import agency_details,bus_details,via_details
-from bus_booking.models import Bus_agency,Bus,via
+from .forms import agency_details,bus_details,via_details,date_test,dateform
+from bus_booking.models import Bus_agency,Bus,via,Bus_Booking,passenger
 from django.contrib.auth.models import User
 from user_authentication.models import Profile
 from django.contrib.auth.decorators import login_required
@@ -44,9 +44,10 @@ def add_bus(request):
         return render(request,'bus_vendor/home.html')
     else:
         form=bus_details()
+        print(form)
         return render(request,'bus_vendor/bus_details.html',{'form':form})
 
-def add_via(request):
+def add_via(request,pk):
     if request.method=='POST':
 
         print(request.user)
@@ -79,4 +80,61 @@ def add_via(request):
         return render(request,'bus_vendor/home.html')
     else:
         form=via_details()
-        return render(request,'bus_vendor/via.html',{'form':form})
+        return render(request,'bus_vendor/via.html',{'form':form,'pk':pk})
+
+def current_buses(request):
+    a=Bus_agency.objects.get(user=request.user)
+    bus=Bus.objects.filter(agency=a)
+    buses=[]
+    for b in bus:
+        vias=via.objects.filter(bus=b)
+        buses.append([b,vias])
+
+    return render(request,'bus_vendor/home.html',{'buses':buses})
+
+def passengerlist(request,pk):
+    if request.method=="POST":
+        form=dateform(request.POST)
+        if form.is_valid():
+            date=form.cleaned_data['date']
+            total=[]
+            bookings=Bus_Booking.objects.filter(bus_start_date=date,serviceno=pk)
+            for b in bookings:
+                passengers=passenger.objects.filter(booking_id=b)
+                for p in passengers:
+                    total.append([p.name,p.seatno,p.booking_id.booking_id,b.start_city,b.destination_city])
+        return render(request,'bus_vendor/passengerlist.html',{'form':form,'total':total})
+    elif pk:
+        form=dateform()
+        return render(request,'bus_vendor/passengerlist.html',{'form':form})
+
+def date_testing(request):
+    if request.method=="POST":
+        form=date_test(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+
+
+    else:
+        form=date_test()
+        return render(request,'bus_vendor/bus_dates.html',{'form':form})
+
+def edit_agency(request):
+    if request.method == 'POST':
+        agency=Bus_agency.objects.get(user=request.user)
+        form = agency_details(request.POST,instance=agency)
+        if form.is_valid() :
+            form.save()
+
+            messages.success(request, ('Your profile was successfully updated!'))
+            return redirect('user_authentication:edit_agency')
+        else:
+            messages.error(request, ('Please correct the error below.'))
+    else:
+        print('outside')
+        agencys=Bus_agency.objects.get(user=request.user)
+        print(agencys)
+        form = agency_details(instance=agencys)
+
+    return render(request, 'bus_vendor/edit_agency.html', {
+            'form': form,        })

@@ -1,0 +1,132 @@
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {% block extrahead%}
+    <meta charset="utf-8">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title></title>
+    <style>
+      body{
+    background: #eee;
+}
+span{
+    font-size:15px;
+}
+.box{
+    padding:60px 0px;
+}
+
+.box-part{
+    background:#FFF;
+    border-radius:0;
+    padding:60px 10px;
+    margin:30px 0px;
+}
+.text{
+    margin:20px 0px;
+}
+
+.fa{
+     color:#4183D7;
+}
+      </style>
+      {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+    <div class="box">
+        <div class="container">
+         	<div class="row">
+            {%for b in bookings%}
+
+    			    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+    					<div class="box-part text-center">
+
+                            <i><img src="{% static 'images/bus-icon.jpg' %}" style="width:50px"> </i>
+
+    						<div class="title">
+    							<h3>{{b.serviceno.agency.name}}</h3>
+    						</div>
+
+    						<div class="text">
+
+                  <div class="row">
+                    <div class="col-5">
+                      <h4>{{b.start_city}}<br><br>
+                      {{b.start.date}}<br><br>
+                      {{b.start.time}}
+                    </h4>
+                    </div>
+                    <div class="col-2">
+                      <h4>TO</h4>
+                    </div>
+
+                    <div class="col-5">
+                      <h4>{{b.destination_city}}<br><br>
+                      {{b.reach.date}}<br><br>
+                      {{b.reach.time}}
+                    </h4>
+                    </div>
+
+                  </div>
+    						</div>
+
+    						<a href="#" data-toggle="modal" data-target="#{{b.booking_id}}">Learn More</a>
+
+    					 </div>
+    				</div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="{{b.booking_id}}" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <center>
+                    <h4>Booking Details</h4>
+                    </center>
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                  <h3>Ticket Id : {{b.booking_id}}</h3>
+                  {% for key,value in passengers.items %}
+
+                  {% if key == b.booking_id%}
+                  {% for a in value %}
+                  <h4>Passenger Name : {{a.name}}</h4>
+                  <h5>Seat : {{a.seatno}}</h5>
+                  {% endfor%}
+                  {% endif %}
+                  {%endfor%}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {% endfor %}
+    		</div>
+        </div>
+    </div>
+    {% endblock  %}
+  </body>
+</html>

@@ -1,13 +1,23 @@
-<!DOCTYPE html>
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    {% block extrahead %}
+    <style media="screen">
+      #nava{
+        padding-left: 700px
+      }
+    </style>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> -->
 
 <!-- Font Awesome -->
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -18,10 +28,103 @@
 <!-- Tempus Dominus Bootstrap 4 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
-
+{% endblock %}
   </head>
   <body>
+{% block body %}
+<form method='POST' style="margin-left:5%">
 
+<div class="container card" style="width:40%">
+  <div class="row text-center">
+<div class="col" style="margin-top:2%">
+  <h2>Bus Details</h2>
+<hr>
+</div>
+  </div>
+  <div class="row">
+<div class="col">
+    <input style="width:100%;height:40px" type="{{form.serviceno.html_type}}" placeholder="    Service No" name="{{form.serviceno.html_name}}"/>
+</div>
+  </div>
+<br>
+  <div class="row">
+<div class="col">
+<select style="width:100%;height:40px" name="{{form.Bus_type.html_name}}">
+  <option value="Sleeper">Sleeper</option>
+  <option value="Semi Sleeper">Semi Sleeper</option>
+  <option value="Seater">Seater</option>
+
+</select>
+</div>
+<div class="col">
+  <select style="width:100%;height:40px" name="{{form.Bus_model.html_name}}">
+    <option value="scania">scania</option>
+    <option value="volvo">volvo</option>
+    <option value="super luxary">super luxary</option>
+    <option value="Normal">Normal</option>
+
+  </select>
+
+
+</div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col">
+      <input style="width:100%;height:40px" type="{{form.start_city.html_type}}" placeholder="    From" name="{{form.start_city.html_name}}" >
+    </div>
+    <div class="col" >
+      <input style="width:100%;height:40px" type="{{form.destination_city.html_type}}" placeholder="    To" name="{{form.destination_city.html_name}}" >
+    </div>
+  </div>
+  <br>
+<div class="row">
+  <div class="col">
+    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+        <input style="width:84%;height:40px" type="{{form.start.html_type}}" placeholder="Start Date and time" name="{{form.start.html_name}}"  data-target="#datetimepicker1"/>
+        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+    </div>
+
+  </div>
+  <div class="col">
+    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+        <input style="width:84%;height:40px" type="{{form.reach.html_type}}" placeholder="Reach Date and time"name="{{form.reach.html_name}}"  data-target="#datetimepicker2"/>
+        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+    </div>
+
+  </div>
+
+
+</div>
+<br>
+<div class="row">
+  <div class="col">
+    <input style="width:100%;height:40px" value="40" type="{{form.noseats.html_type}}" placeholder="no of seats"name="{{form.noseats.html_name}}"  data-target="#datetimepicker2"/>
+
+  </div>
+
+
+</div>
+<br>
+<button type="submit" class="btn btn-success" name="button">Add Bus</button>
+<br>
+</div>
+</form>
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker(
+
+                );
+                $('#datetimepicke2').datetimepicker(
+
+                );
+            });
+        </script>
+{% endblock %}
     u r in bus_details.html
     <form method='POST' style="margin-left:5%">
       {%csrf_token%}
