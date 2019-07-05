@@ -93,8 +93,12 @@ def buses(request):
             print(buses)
             bus_list=[]
             for x in buses:
-                if x.destination_city==destination_city and x.start_city==start_city:
-                    if x.start.date()==start_date:
+                if x.destination_city.lower()==destination_city.lower() and x.start_city.lower()==start_city.lower():
+                    dates=bus_dates.objects.filter(bus=x)
+                    dates1=[]
+                    for d1 in dates:
+                        dates1.append(d1.date.date())
+                    if start_date in dates1:
                         d=x.costperkm * x.distance_from_startcity
                         t=x.reach-x.start
                         t1=t.days*24+t.seconds//3600
@@ -107,32 +111,48 @@ def buses(request):
                     y=via.objects.filter(bus=x)
                     for z in y:
                         for a in y:
-                            if z.place_name==start_city and a.place_name==destination_city:
+                            if z.place_name.lower()==start_city.lower() and a.place_name.lower()==destination_city.lower():
+                                print('im true')
                                 if (a.distance_from_startcity - z.distance_from_startcity) > 0:
-                                    if z.reach.date()==start_date:
+                                    dates=bus_dates.objects.filter(bus=x)
+                                    dates1=[]
+                                    for d1 in dates:
+                                        d2=d1.date+timedelta(minutes=z.journeytime)
+                                        dates1.append(d2.date())
+                                    print(dates1)
+                                    if start_date in dates1:
                                         d=(x.costperkm) * (a.distance_from_startcity - z.distance_from_startcity)
-                                        t=a.reach-z.reach
-                                        t1=t.days*24+t.seconds//3600
-                                        t2=(t.seconds % 3600) // 60
+                                        t=a.journeytime-z.journeytime
+                                        t1=t//60
+                                        t2=t%60
                                         bus_list.append([x,d,z.reach.time(),a.reach.time(),t1,t2])
 
                     for z in y:
 
-                        if (x.start_city==start_city and z.place_name==destination_city) or (x.destination_city==destination_city and z.place_name==start_city):
-                            if x.start_city==start_city:
-                                if x.start.date()==start_date:
+                        if (x.start_city.lower()==start_city.lower() and z.place_name.lower()==destination_city.lower()) or (x.destination_city.lower()==destination_city.lower() and z.place_name.lower()==start_city.lower()):
+                            if x.start_city.lower()==start_city.lower():
+                                dates=bus_dates.objects.filter(bus=x)
+                                dates1=[]
+                                for d1 in dates:
+                                    dates1.append(d1.date.date())
+                                if start_date in dates1:
                                     d=(x.costperkm) * (z.distance_from_startcity)
-                                    t=x.start-z.reach
-                                    t1=t.days*24+t.seconds//3600
-                                    t2=(t.seconds % 3600) // 60
+                                    t=x.journeytime-z.journeytime
+                                    t1=t//60
+                                    t2=t % 60
                                     bus_list.append([x,d,x.start.time(),z.reach.time(),t1,t2])
-                            elif x.destination_city==destination_city:
+                            elif x.destination_city.lower()==destination_city.lower():
                                 print('true')
-                                if z.reach.date()==start_date:
+                                dates=bus_dates.objects.filter(bus=x)
+                                dates1=[]
+                                for d1 in dates:
+                                    d2=d1.date+timedelta(minutes=z.journeytime)
+                                    dates1.append(d2.date())
+                                if start_date in dates1:
                                     d=(x.costperkm) * (x.distance_from_startcity - z.distance_from_startcity)
-                                    t=z.reach-x.reach
-                                    t1=t.days*24+t.seconds//3600
-                                    t2=(t.seconds % 3600) // 60
+                                    t=x.journeytime-z.journeytime
+                                    t1=t//60
+                                    t2=t % 60
 
                                     bus_list.append([x,d,z.reach.time(),x.reach.time(),t1,t2])
 

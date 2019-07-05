@@ -54,6 +54,7 @@ class Bus(models.Model):
         start=models.DateTimeField(null=True, blank=True)
         reach=models.DateTimeField(null=True, blank=True)
         date=models.DateField()
+        journeytime=models.IntegerField(null=True)
         def get_absolute_url(self):
             return reverse('bus_detail',kwargs={'id' : self.id})
 
@@ -64,10 +65,11 @@ class via(models.Model):
     place_name=models.CharField(max_length=100)
     distance_from_startcity=models.FloatField()
     reach=models.DateTimeField(null=True, blank=True)
+    journeytime=models.IntegerField(null=True)
 
 class bus_dates(models.Model):
     bus=models.ForeignKey(Bus,on_delete=models.CASCADE)
-    date=models.DateField()
+    date=models.DateTimeField()
 #    booking=models.ForeignKey('Bus_Booking',on_delete=SET_NULL)
 
 
