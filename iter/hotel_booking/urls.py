@@ -1,0 +1,10 @@
+from django.urls import path,include, re_path
+from django.conf.urls import url
+from . import views
+
+app_name = 'hotel_booking'
+
+urlpatterns = [
+    path('hotels/',views.hotels,name="hotels"),
+    path('hotels/<int:pk>', views.hotel,name="hotel"),
+]

@@ -1,0 +1,42 @@
+{% extends 'user_authentication/base.html' %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {% block extrahead%}
+    <meta charset="utf-8">
+    <style>
+  #map {
+    width: 100%;
+    height: 400px;
+    background-color: grey;
+  }
+</style>
+{% endblock %}
+  </head>
+  <body>
+    {% block body%}
+    <br><br><br><br><br><br><br><br><br>
+    <h3>gdxgsdrsez</h3>
+    <h3>My Google Maps Demo</h3>
+{% if hotel %}
+  <div id="map"></div>
+  <p></p>
+  <script>
+  // Initialize and add the map
+  function initMap() {
+  // The location of Uluru
+  var uluru = {lat: {{ hotel.lat }}, lng: {{ hotel.long }}};
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+     document.getElementById('map'), {zoom: 4, center: uluru});
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({position: uluru, map: map});
+  }
+   </script>
+   <script async defer
+   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUONFfyXgJWAyohVtFtciUDi-HrHzuoTs&callback=initMap">
+   </script>
+{% endif %}
+{% endblock%}
+  </body>
+</html>
