@@ -1,4 +1,4 @@
-{% extends 'bus_vendor/base.html' %}
+{% extends 'user_authentication/base2.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
@@ -26,7 +26,7 @@
   <body>
     {% block body%}
     <center>
-    <div class="container card" style="margin-bottom:5%;background-color:white;width:50%">
+    <div class="container card" style="margin-top:5%;margin-bottom:5%;background-color:white;width:50%">
     <form method="POST" action={% url 'bus_booking:passengerdetails' %}>
     <h1>forms</h1>
 

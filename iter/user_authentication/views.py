@@ -18,6 +18,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm , PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from bus_booking.models import Bus_agency
 
 
 # Create your views here.
@@ -47,12 +48,13 @@ def signup(request):
             profile=Profile()
             profile.user = new_user
             profile.phone_number = phone_number
+            profile.user_type='C'
             if picture:
                 profile.picture = picture
             profile.save()
 
             current_site = get_current_site(request)
-            mail_subject = 'Activate your Donatekart account.'
+            mail_subject = 'Activate your Iter account.'
             message = render_to_string('user_authentication/acc_active_email.html', {
                 'user': new_user,
                 'domain': current_site.domain,
@@ -74,6 +76,101 @@ def signup(request):
 
     return render(request, "user_authentication/signuppage.html",{'form':form})
 
+def bussignup(request):
+    # Create your views here.
+    if request.method=='POST':
+
+        form=UserRegisterForm(request.POST,request.FILES)
+        if form.is_valid():
+
+            username=form.cleaned_data.get('username')
+            raw_password=form.cleaned_data.get('password1')
+            new_user = form.save(commit=False)
+            new_user.is_active=False
+            new_user.save()
+            new_user.refresh_from_db()  # load the profile instance created by the signal
+            new_user.save()
+            phone_number = form.cleaned_data.get('phone_number')
+            picture = form.cleaned_data.get('picture')
+            profile=Profile()
+            profile.user = new_user
+            profile.phone_number = phone_number
+            profile.user_type='B'
+            if picture:
+                profile.picture = picture
+            profile.save()
+
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your Iter account.'
+            message = render_to_string('user_authentication/acc_active_email.html', {
+                'user': new_user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(new_user.pk)),
+                'token':account_activation_token.make_token(new_user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return HttpResponse('Please confirm your email address to complete the registration')
+
+
+        print(form)
+    else:
+        form = UserRegisterForm()
+        print(form)
+
+    return render(request, "user_authentication/signuppage.html",{'form':form})
+
+def hotelsignup(request):
+    # Create your views here.
+    if request.method=='POST':
+
+        form=UserRegisterForm(request.POST,request.FILES)
+        if form.is_valid():
+
+            username=form.cleaned_data.get('username')
+            raw_password=form.cleaned_data.get('password1')
+            new_user = form.save(commit=False)
+            new_user.is_active=False
+            new_user.save()
+            new_user.refresh_from_db()  # load the profile instance created by the signal
+            new_user.save()
+            phone_number = form.cleaned_data.get('phone_number')
+            picture = form.cleaned_data.get('picture')
+            profile=Profile()
+            profile.user = new_user
+            profile.phone_number = phone_number
+            profile.user_type='H'
+            if picture:
+                profile.picture = picture
+            profile.save()
+
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your Iter account.'
+            message = render_to_string('user_authentication/acc_active_email.html', {
+                'user': new_user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(new_user.pk)),
+                'token':account_activation_token.make_token(new_user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return HttpResponse('Please confirm your email address to complete the registration')
+
+
+        print(form)
+    else:
+        form = UserRegisterForm()
+        print(form)
+
+    return render(request, "user_authentication/signuppage.html",{'form':form})
+
+
 def user_login(request):
     if request.method == 'POST':
         form=AuthenticationForm(request.POST)
@@ -92,13 +189,16 @@ def user_login(request):
                 login(request,admin)
                 #return HttpResponseRedirect(reverse('cus_login:home'))
                 #return render(request, 'user_authentication/home.html')
+
                 return HttpResponseRedirect("/busbooking/buses")
             elif admin.is_active and x.user_type == 'B':
                 login(request,admin)
                 #return HttpResponseRedirect(reverse('cus_login:home'))
                 #return HttpResponseRedirect(reverse('hotel_vendor:home'))
-                return HttpResponseRedirect("/bus_vendor/buses")
-
+                if Bus_agency.objects.filter(user=request.user):
+                    return HttpResponseRedirect("/bus_vendor/buses")
+                else:
+                    return HttpResponseRedirect("/bus_vendor")
             else:
                 return HttpResponse("Account has been diasabled!")
         else:
@@ -111,7 +211,7 @@ def user_login(request):
 @login_required
 def logoutuser(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login:login.home'))
+    return HttpResponseRedirect(reverse('user_authentication:user_login'))
 
 
 def edit_profile(request):

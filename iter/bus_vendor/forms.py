@@ -32,6 +32,7 @@ class bus_details(forms.Form):
     bus_type=forms.ChoiceField(choices = bus_type_choice, label="", initial='', widget=forms.Select(), required=True)
     bus_model=forms.ChoiceField(choices = bus_model_choice, label="", initial='', widget=forms.Select(), required=True)
     costperkm=forms.FloatField(required=True,widget=forms.TextInput())
+    distance_from_startcity=forms.IntegerField(required=True,widget=forms.TextInput())
     serviceno=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
     noseats=forms.IntegerField(required=True,widget=forms.TextInput())
     start_city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
@@ -44,6 +45,7 @@ class bus_details(forms.Form):
             'class': 'form-control datetimepicker-input',
             'data-target': '#datetimepicker2'
         }))
+    journeytime=forms.IntegerField()    
 
     class Meta:
         model = Bus
@@ -61,13 +63,19 @@ class via_details(forms.Form):
         fields = ['place_name','reach','serviceno','distance_from_startcity']
 
 class date_test(forms.Form):
-    monday = forms.BooleanField( widget=forms.CheckboxInput())
-    tuesday = forms.BooleanField( widget=forms.CheckboxInput())
-    wednesday = forms.BooleanField( widget=forms.CheckboxInput())
-    thursday = forms.BooleanField( widget=forms.CheckboxInput())
-    friday = forms.BooleanField( widget=forms.CheckboxInput())
-    saturday = forms.BooleanField( widget=forms.CheckboxInput())
-    sunday = forms.BooleanField( widget=forms.CheckboxInput())
+
+    fromdate=forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
+    monday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    tuesday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    wednesday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    thursday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    friday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    saturday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    sunday = forms.BooleanField( required=False,widget=forms.CheckboxInput())
+    tilldate=forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
 
 class dateform(forms.Form):
     date=forms.DateField(input_formats=['%Y-%m-%d'])
+
+class service(forms.Form):
+    serviceno=forms.CharField()
