@@ -1,0 +1,277 @@
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+<head>
+{% block extrahead%}
+    <meta charset="utf-8">
+    <title>ITER</title>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-map.min.js?hcode=be5162d915534272a57d0bb781d27f2b"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link href="https://cdn.anychart.com/playground-css/seat-map/seat-map-title.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css?hcode=be5162d915534272a57d0bb781d27f2b" type="text/css" rel="stylesheet">
+    <style type="text/css">
+      .boxed {
+        border: 1px solid #AEE313 ;
+        width:80px;
+        height:80px;
+        background-color:#AEE313;
+        }
+        .boxed1 {
+          border: 1px solid  #14b3ff;
+          width:80px;
+          height:80px;
+
+          }
+          .boxed2 {
+            border: 1px solid  #edf1f7;
+            width:80px;
+            height:80px;
+            background-color:#edf1f7;
+
+            }
+
+      html, body, #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+
+      }
+    </style>
+
+{% endblock  %}
+</head>
+
+  <body>
+{% block body %}
+<script>
+  if($(window).scrollTop()) {
+document.getElementsByTagName("nav").setAttribute("class", "scrolled awake");
+
+}
+
+else {
+
+$('nav').removeClass('black');
+
+}
+
+
+  </script>
+
+<div class=row style="margin-left:10%;margin-top:1%;height:80%;width:100%">
+    <div class=col id="container"></div>
+    <div class=col style="margin-left:10%;margin-top:2%;height:100%;width:100%">
+      <form method="POST">
+      {% csrf_token %}
+
+      <input type="hidden" id="seats_text" name="seats_text">
+      <div class="boxed">
+
+      </div><p>selected seats</p>
+      <div class="boxed1">
+
+      </div><p>available seats</p>
+      <div class="boxed2">
+
+      </div><p>not available</p>
+<br>
+      <button type="submit" class="btn btn-success" style="width:30%;height:30%;"><h3 style="color:white">confirm booking</h3></button>
+
+      </form>
+
+  </div>
+
+  </div>
+
+    <script>
+    anychart.onDocumentReady(function () {
+    var stage = acgraph.create('container');
+
+    $('#container').append('<div class="seat-map-title">' +
+    '<h1>Front Side</h1>' +
+      '</div>');
+
+    // get svg file
+    $.ajax({
+    type: 'GET',
+    url: '	http://127.0.0.1:8000/static/bus_booking/buscopy.svg',
+    // The data that have been used for this sample can be taken from the CDN
+    // load SVG image using jQuery ajax
+    success: function (svgData) {
+    // Data for creating a SeatMap
+    var djangodata={{json_list|safe}}
+    var data=anychart.data.set(djangodata);
+
+    var mapping =data.mapAs({id:[0],value:[1],row:[2],col:[3],status:[4],fill:[5],hoverFill:[6]});
+    var chart=anychart.seatMap(mapping);
+    // var chart = anychart.seatMap([
+    //   {id: "_x31_", value:'1',row:"1",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_", value: "2",row:"1",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_", value: "3",row:"1",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x34_", value: "4",row:"1",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x35_", value: "5",row:"2",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x36_", value: "6",row:"2",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x37_", value: "7",row:"2",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x38_", value: "8",row:"2",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x39_", value: "9",row:"3",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_0", value: "10",row:"3",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_1", value: "11",row:"3",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_2", value: "12",row:"3",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_3", value: "13",row:"4",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_4", value: "14",row:"4",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_5", value: "15",row:"4",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_6", value: "16",row:"4",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_7", value: "17",row:"5",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_8", value: "18",row:"5",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x31_9", value: "19",row:"5",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_0", value: "20",row:"5",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_1", value: "21",row:"6",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_2", value: "22",row:"6",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_3", value: "23",row:"6",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_4", value: "24",row:"6",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_5", value: "25",row:"7",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_6", value: "26",row:"7",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_7", value: "27",row:"7",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_8", value: "28",row:"7",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x32_9", value: "29",row:"8",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_0", value: "30",row:"8",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_1", value: "31",row:"8",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_2", value: "32",row:"8",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_3", value: "33",row:"9",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_4", value: "34",row:"9",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_5", value: "35",row:"9",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_6", value: "36",row:"9",col:"4",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_7", value: "37",row:"10",col:"1",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_8", value: "38",row:"10",col:"2",status:'availabe',fill:'#fff'},
+    //   {id: "_x33_9_1_", value: "39",row:"10",col:"3",status:'availabe',fill:'#fff'},
+    //   {id: "_x34_0", value: "40",row:"10",col:"4",status:'availabe',fill:'#fff'},
+    // ]);
+
+
+    var series = chart.getSeries(0);
+
+    series.hovered().fill(function () {
+    var attrs = this.attributes;
+    //console.log(this)
+    if (attrs) {
+    // attr in svg.file
+    var class_ = attrs.class;
+
+    switch (class_) {
+       case 'st0':
+           return '#14b3ff';
+       case 'rect' :
+           return attrs.fill;
+       default:
+           return '#fff';
+           // It returns the original color for
+           // those elements that are not fill over
+    }
+    }
+    });
+
+    // series.selected().fill(function () {
+    // const data=document.getElementsByTagName('textarea')
+    // console.log(this);
+    // //console.log(series.jH[0].status);
+    // this.iterator.f.id
+    // var attrs = this.attributes;
+    // if (attrs) {
+    // // attr in svg.file
+    // var class_ = attrs.class;
+    // this.iterator.f.status='booked'
+    // switch (class_) {
+    //    case 'rect' :
+    //        return attrs.fill;
+    //    default:
+    //        return '#14b3ff';
+    // }
+    // }
+    // });
+
+    chart.listen("pointClick", function(e){
+    //  e.preventDefault()
+      var index = e.iterator.getIndex();
+      var row1=data.row(index)
+
+    //  var dataset=series.jH;
+    //  var row = dataset[index];
+      if (row1[4]=='availabe')
+      {
+        e.series.selected().fill('#AEE313')
+
+
+        row1[5]='#AEE313'
+        row1[4]='selected'
+        console.log(row1)
+        // e.series.jm.selected.oC.ma.fill='#AEE313'
+        // e.series.jH[index].status='selected'
+        // e.series.jH[index].fill='#AEE313'
+        // e.iterator.f.fill='#AEE313'
+      }
+      else if (row1[4]=='selected')
+      {
+        row1[5]='#FFF'
+        e.series.selected().fill('#FFF')
+
+        row1[4]='availabe'
+
+        console.log(row1)
+
+        // e.series.jH[index].status='availabe'
+        // e.series.jH[index].fill='#FFF'
+        // e.iterator.f.fill='#FFF'
+        // e.series.jm.selected.oC.ma.fill='#FFF'
+      }
+    var len=data.fc.length
+    var str=""
+    for(var i=0;i<len;i++)
+    {
+      var temp=data.row(i)[1].concat('-',data.row(i)[4],',')
+      str=str.concat(temp)
+    }
+    document.getElementById("seats_text").value=str
+    console.log(str)
+    });
+
+    series.tooltip().title().useHtml(true);
+    series.tooltip()
+    .format("row : {%row} col:{%col}");
+
+
+
+
+
+    chart.background().stroke("5 black");
+    // set svg data
+    chart.geoData(svgData);
+    chart.padding([70, 20, 50, 20]);
+
+    // create chart legend
+    // items source mode categories
+
+    // set container id for the chart
+    chart.container(stage);
+    // initiate chart drawing
+    chart.draw();
+    }
+    });
+    });
+    </script>
+
+    <div>
+    {{bus.serviceno}}
+    </div>
+
+{% endblock %}
+  </body>
+</html>

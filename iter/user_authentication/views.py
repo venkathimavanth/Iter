@@ -17,6 +17,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm , PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
@@ -91,12 +92,12 @@ def user_login(request):
                 login(request,admin)
                 #return HttpResponseRedirect(reverse('cus_login:home'))
                 #return render(request, 'user_authentication/home.html')
-                return HttpResponse("logged in")
+                return HttpResponseRedirect("/busbooking/buses")
             elif admin.is_active and x.user_type == 'B':
                 login(request,admin)
                 #return HttpResponseRedirect(reverse('cus_login:home'))
                 #return HttpResponseRedirect(reverse('hotel_vendor:home'))
-                return HttpResponse("logged in")
+                return HttpResponseRedirect("/bus_vendor/buses")
 
             else:
                 return HttpResponse("Account has been diasabled!")

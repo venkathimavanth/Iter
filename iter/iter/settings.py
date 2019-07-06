@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'trip_planner',
     'user_authentication',
     'crispy_forms',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

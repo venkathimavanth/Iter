@@ -1,48 +1,95 @@
-<!DOCTYPE html>
+{% extends 'bus_vendor/base.html' %}
 {% load static %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="{% static "user_authentication/loginform/util.css" %} ">
+<link rel="stylesheet" type="text/css" href="{% static "user_authentication/loginform/main.css" %}">
 
+{% endblock %}
 </head>
 <body>
 
-	<div class="limiter">
-		<div class="container-login100" >
-			<div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
-				<form class="login100-form validate-form flex-sb flex-w" method="POST">
-					<span class="login100-form-title p-b-53">
-						Login In With
-					</span>
 
+{% block body%}
+<div class="limiter" style="margin-top:-5%">
+	<div class="container-login100">
+		<div class="wrap-login100 p-t-50 p-b-90">
+			<form class="login100-form validate-form flex-sb flex-w" method="POST">
+				{% csrf_token %}
+				<span class="login100-form-title p-b-51">
+					Login
+				</span>
 
-                    <div style="width:500px">
+{% for field in form %}
+				<div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
+					<input class="input100" type="{{ field.html_name }}" name="{{ field.html_name }}" placeholder="{{ field.html_name }}">
+					<span class="focus-input100"></span>
+				</div>
 
-                            {% csrf_token %}
-                            {{ form|crispy }}
+{% endfor%}
 
-                    </div>
-					<div class="container-login100-form-btn m-t-17">
-						<button class="login100-form-btn" type="submit ">
-							LogIn
-						</button>
-					</div>
+				<div class="flex-sb-m w-full p-t-3 p-b-24">
 
-					<div class="w-full text-center p-t-55">
-						<span class="txt2">
+					<div>
+						<span >
 							Not a member?
 						</span>
-
-						<a href="#" class="txt2 bo1">
+						<a href="{% url 'user_authentication:signup' %}" >
 							Sign up now
 						</a>
-                        <a href="{% url 'password_reset' %}">reset password</a>
+
+						<a href="{% url 'password_reset' %}" class="txt1">
+							Forgot?
+						</a>
 					</div>
-				</form>
-			</div>
+				</div>
+
+				<div class="container-login100-form-btn m-t-17">
+					<button class="login100-form-btn">
+						Login
+					</button>
+				</div>
+
+			</form>
 		</div>
 	</div>
+</div>
+
+
+{% endblock%}
+<form  method="POST">
+						<div style="width:500px;margin-left:30%;margin-top:5%;padding:10px" class="container card">
+										{% csrf_token %}
+
+										{{ form.username|as_crispy_field }}
+										{{form.password|as_crispy_field}}
+						</div>
+	<div>
+		<button class="btn btn-success" type="submit ">
+			LogIn
+		</button>
+	</div>
+	<div >
+		<span >
+			Not a member?
+		</span>
+		<a href="#" >
+			Sign up now
+		</a>
+		<a href="{% url 'password_reset' %}">reset password</a>
+	</div>
+</form>
+
+
+
+
+
+
 
 
 

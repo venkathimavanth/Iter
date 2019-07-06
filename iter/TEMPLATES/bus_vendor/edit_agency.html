@@ -1,0 +1,73 @@
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% block extrahead %}
+    <style>
+      #nava{
+        padding-left: 700px
+      }
+
+    </style>
+    {% endblock%}
+  </head>
+  <body>
+    {% block body %}
+    <form  method="post">
+      {% csrf_token%}
+      <div class="container card" style="width:40%">
+        <div class="row text-center">
+      <div class="col" style="margin-top:2%">
+        <h2>Agency Details</h2>
+      <hr>
+      </div>
+        </div>
+        <div class="row">
+      <div class="col">
+          <input style="width:100%;height:40px" type="{{form.name.html_type}}" value="{{form.name.value}}" placeholder="    Agency Nmae" name="{{form.name.html_name}}"/>
+      </div>
+        </div>
+      <br>
+      <div class="row">
+        <div class="col">
+          <input style="width:100%;height:40px" type="{{form.address.html_type}}" value="{{form.address.value}}" placeholder="    Address" name="{{form.address.html_name}}" >
+        </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col">
+          <input style="width:100%;height:40px" type="{{form.phone_number.html_type}}" value="{{form.phone_number.value}}" placeholder="Phone Number"name="{{form.phone_number.html_name}}"  data-target="#datetimepicker2"/>
+
+
+        </div>
+
+      </div>
+    <br>
+    <div class="row">
+      <div class="col">
+          <input style="width:100%;height:40px" type="{{form.email.html_type}}" value="{{form.email.value}}" placeholder="Phone Number"name="{{form.phone_number.html_name}}"  data-target="#datetimepicker2"/>
+
+
+        </div>
+
+      </div>
+
+    <br>
+      <button type="submit" class="btn btn-success" name="button">Update</button>
+
+      <br>
+
+
+      </div>
+
+    </form>
+    {% endblock%}
+
+  </body>
+</html>

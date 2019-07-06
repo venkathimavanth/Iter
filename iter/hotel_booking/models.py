@@ -22,7 +22,24 @@ class Hotels(models.Model):
                                     ]
                                     )
     email=models.EmailField(max_length=70, null=True, blank=True, unique=True)
+    description = models.CharField(max_length=1000,default="Hello")
+    lat = models.FloatField(default = 0)
+    long = models.FloatField(default = 0)
 
+    def get_absolute_url(self):
+        return reverse('hotel_detail',kwargs={'id' : self.id})
+
+    def first_image(self):
+        return self.images.all()[0].image.url
+
+    def all_images(self):
+        all_images = []
+        for image in self.images.all():
+            all_images.append(image.image.url)
+        return all_images
+
+    def __str__(self):
+        return self.name
 
 class Rooms(models.Model):
     hotel_id=models.ForeignKey(Hotels, on_delete=models.CASCADE)
@@ -35,7 +52,6 @@ class Rooms(models.Model):
 
 class Hotel_Booking(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-
     name=models.CharField(max_length=100)
     gender=models.CharField(max_length=1)
     age=models.IntegerField()
@@ -46,3 +62,16 @@ class Hotel_Booking(models.Model):
     totime=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
     hotel_id=models.ForeignKey(Hotels, on_delete=models.CASCADE)
     booking_id=models.CharField(max_length=20)
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='hotels')
+    hotel = models.ForeignKey(Hotels,on_delete=models.CASCADE,related_name='images')
+
+    def __str__(self):
+        return self.hotel.name
+
+class Comments(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotels,on_delete=models.CASCADE)
+    comment = models.TextField(blank = True)
+    rating = models.IntegerField(default=0)

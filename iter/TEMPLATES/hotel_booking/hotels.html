@@ -1,0 +1,97 @@
+{% extends 'user_authentication/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block extrahead %}
+    <title>Iter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% endblock %}
+    </head>
+  <body>
+{% block body %}
+
+    <div class="hero-wrap js-fullheight" style="background-image: url({% static 'bus_booking/images/bg_1.jpg' %});">
+      <div class="overlay"></div>
+    </div>
+
+		<section class="ftco-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+          	<div class="row">
+              {% if hotels %}
+              {% for hotel in hotels %}
+		    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="destination">
+		    					<a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url({{ hotel.first_image }});">
+		    						<div class="icon d-flex justify-content-center align-items-center">
+		    							<span class="icon-link"></span>
+		    						</div>
+		    					</a>
+		    					<div class="text p-3">
+		    						<div class="d-flex">
+		    							<div class="one">
+				    						<h3><a href="#">{{ hotel.name }}</a></h3>
+                        <span class="rating-static rating-{{ sum|mul:10 }}"></span>
+			    						</div>
+			    						<div class="two">
+			    							<span class="price per-price">$40<br><small>/night</small></span>
+		    							</div>
+		    						</div>
+		    						<p>{{ hotel.phone_number }}</p>
+		    						<hr>
+		    						<p class="bottom-area d-flex">
+		    							<span><i class="icon-map-o"></i>{{ hotel.address }}</span>
+		    							<span class="ml-auto"><a href="{% url 'hotel_booking:hotel' hotel.hotel_id %}">View</a></span>
+		    						</p>
+		    					</div>
+		    				</div>
+		    			</div>
+              {% endfor %}
+              {% else %}
+              <h1>No hotels available</h1><br><br><br>
+              <br><img src="/media/hotels/hotel.jpeg" alt="No hotels Available" style="height:300px;width:350px">
+              {% endif %}
+          </div> <!-- .col-md-8 -->
+        </div>
+      </div>
+      </div>
+    </section> <!-- .section -->
+
+		<section class="ftco-section-parallax">
+      <div class="parallax-img d-flex align-items-center">
+        <div class="container">
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+              <h2>Subcribe to our Newsletter</h2>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
+              <div class="row d-flex justify-content-center mt-5">
+                <div class="col-md-8">
+                  <form action="#" class="subscribe-form">
+                    <div class="form-group d-flex">
+                      <input type="text" class="form-control" placeholder="Enter email address">
+                      <input type="submit" value="Subscribe" class="submit px-3">
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+{% endblock %}
+
+
+
+
+  </body>
+</html>

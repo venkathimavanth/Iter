@@ -1,11 +1,162 @@
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    {% block extrahead%}
     <meta charset="utf-8">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title></title>
+    <style>
+      body{
+    background: #eee;
+}
+span{
+    font-size:15px;
+}
+.box{
+    padding:60px 0px;
+}
+
+.box-part{
+    background:#FFF;
+    border-radius:0;
+    padding:60px 10px;
+    margin:30px 0px;
+}
+.text{
+    margin:20px 0px;
+}
+
+.fa{
+     color:#4183D7;
+}
+      </style>
+      {% endblock %}
   </head>
   <body>
-    u r in bus_vendor/home.html
-    
+    {% block body %}
+    <div class="box">
+        <div class="container">
+         	<div class="row">
+            {%for b in buses%}
+
+    			    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+    					<div class="box-part text-center">
+
+                            <i><img src="{% static 'images/bus-icon.jpg' %}" style="width:50px"> </i>
+
+    						<div class="title">
+    							<h3>{{b.0.serviceno}}</h3>
+    						</div>
+
+    						<div class="text">
+
+                  <div>
+                    <h2>{{b.0.start_city}}</h2>
+                    <h2>To</h2>
+                    <h2>{{b.0.destination_city}}</h2><br>
+
+                  </div>
+    						</div>
+
+    						<a href="#" data-toggle="modal" data-target="#{{b.0.serviceno}}">Learn More</a>&nbsp
+                <a href="{% url 'bus_vendor:passengerlist' b.0.serviceno %}" >See bookings</a>&nbsp
+                <a href="{% url 'bus_vendor:via' b.0.serviceno %}" >Add via</a>
+
+    					 </div>
+    				</div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="{{b.0.serviceno}}" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <center>
+                    <h4>Bus Details</h4>
+                    </center>
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table">
+                      <tr>
+                  <h3><td>Start City</td>
+                      <td>{{b.0.start_city}}</td> </h3>
+                      </tr>
+                      <tr>
+                  <h3><td>Start Time</td>
+                    <td>{{b.0.start.time}}</td></h3>
+                </tr>
+                <tr>
+                  <h3><td>Destination City</td><td>   {{b.0.destination_city}}</td></h3>
+                </tr>
+                <tr>
+
+                  <h3>
+                    <td>Reach Time         </td><td>{{b.0.reach.time}}</td></h3>
+                </tr>
+                <tr>
+                  <h3><td>Bus Type</td>         <td>{{b.0.Bus_type}}</td>  </h3>
+                </tr>
+                <tr>
+                  <h3><td>Bus model</td>         <td>{{b.0.Bus_model}}</td> </h3>
+                </tr>
+                <tr>
+                  <h3><td>Cost per km </td><td>{{b.0.costperkm}}</td>       </h3>
+                </tr>
+
+                  </table>
+                  </div>
+                  <div style="margin:2%">
+                  <div><h4>Vias</h4></div>
+                  <hr>
+
+                  <div style="margin:2%">
+                    <table class="table">
+                      <tr>
+                  <th>Place Name</th>
+                      <th>Time</th>
+                      <th>Distance</th>
+                      </tr>
+
+                    {% for v in b.1 %}
+                      <tr>
+                  <h3><td>{{v.place_name}}</td>
+                    <td>{{v.reach.time}}</td>
+                  <td>{{v.distance_from_startcity}}KM</td></h3>
+                </tr>
+                {% endfor %}
+
+                  </table>
+
+                  </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {% endfor %}
+    		</div>
+        </div>
+    </div>
+    {% endblock  %}
   </body>
 </html>

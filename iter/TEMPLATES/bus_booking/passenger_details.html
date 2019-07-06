@@ -1,0 +1,76 @@
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% block extrahead%}
+    <style media="screen">
+      input{
+        width:100%;
+        heigth:20%;
+      }
+      select{
+        width:100%;
+        height:100%;
+      }
+
+    </style>
+    {% endblock %}
+  </head>
+
+  <body>
+    {% block body%}
+    <center>
+    <div class="container card" style="margin-bottom:5%;background-color:white;width:50%">
+    <form method="POST" action={% url 'bus_booking:passengerdetails' %}>
+    <h1>forms</h1>
+
+
+    {% csrf_token %}
+    {{ form.management_form }}
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Gender</th>
+    </tr>
+
+    {%for f in form%}
+    <tr>
+      <center>
+      <td >
+        <div style="width:300px">
+      {{f.name|as_crispy_field}}
+      </div>
+      </td>
+      <td>
+
+        <div style="font-size:20px;width:150px;">
+      {{f.age|as_crispy_field}}
+      </div>
+      </td>
+      <td >
+        <div style="font-size:20px">
+
+  {{f.gender|as_crispy_field}}
+  </div>
+  </td>
+  </center>
+  </tr>
+    {% endfor %}
+  </table>
+    <button type="submit" name="button " class="btn btn-success" style="margin-bottom:2%;padding:10px;font-size:15px">Book Tickets </button>
+    </form>
+    </div>
+    </center>
+    {% endblock %}
+  </body>
+
+
+
+</html>
