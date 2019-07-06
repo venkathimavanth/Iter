@@ -10,8 +10,47 @@ import math
 
 
 
-def trip_plan(request):
+def trip_home(request):
     places=Place.objects.all()
+    places_list=[]
+    for p in places:
+        places_list.append(p.city)
+    places_set=set(places_list)
+    places_list=list(places_set)
+    places_list.sort()
+    context ={'places_list':places_list,}
+    return render(request,'trip_planner/home.html',context)
+
+def trip_city(request,value):
+    request.session['city'] = value
+    places=Place.objects.filter(city=value)
+    c=0
+    for p in places:
+        c=c+1
+        p.Description=(p.Description).upper()
+        p.name=(p.name).upper()
+    image_width=1100/c + 40/c
+    context={"places":places,"value":value.upper(),"count":c,"image_width":image_width}
+    return render(request,'trip_planner/placesbycity.html',context)
+
+def trip_plan(request):
+    city=request.session['city']
+    selected_place_no=request.POST['final-list']
+    selected_places=[]
+    selected_place_no=selected_place_no.split(',')
+    selected_place_no=selected_place_no[0:len(selected_place_no)-1]
+    for s in selected_place_no:
+        selected_places.append(int(s[-1]))
+    places=Place.objects.filter(city=city)
+    places_temp=[]
+    i=1
+    for p in places:
+        if i in selected_places:
+            places_temp.append(p)
+            # print(i,selected_places)
+        i=i+1
+    places=places_temp
+
     place_details=[]
     open_close_stay_preferred=[]
     for p in places:
@@ -20,7 +59,8 @@ def trip_plan(request):
         open_close_stay_preferred.append((p.open_time,p.close_time,p.stay_time,p.preferred_time))
     path_planing(place_details,open_close_stay_preferred,p.city,p.state,p.country)
 
-    return HttpResponse("Places")
+    context={}
+    return render(request,'trip_planner/plans.html',context)
 
 
 def path_planing(place_details,ocsp,city,state,country):
@@ -87,7 +127,7 @@ def path_planing(place_details,ocsp,city,state,country):
         positions.sort()
         clusters.append(temp)
 
-    #print(clusters)
+    print(clusters)
     #print(start)
 
     clusters_sp=[]
@@ -114,7 +154,7 @@ def path_planing(place_details,ocsp,city,state,country):
                     completed.append(clusters[c][d])
                     break
         cluster_path=cluster_path+completed
-    #print(cluster_path)
+    print(cluster_path)
 
 
     #least time path
@@ -124,6 +164,7 @@ def path_planing(place_details,ocsp,city,state,country):
 
     least_time_path=[]
     time=7
+    '''
     while len(least_time_path) != len(positions):
         if time>=24:
             time=1
@@ -134,7 +175,7 @@ def path_planing(place_details,ocsp,city,state,country):
             for j in temp:
                 t.append(ocsp_temp[i][j])
             ocsp_not_completed.append(t)
-
+'''
 
 
 
