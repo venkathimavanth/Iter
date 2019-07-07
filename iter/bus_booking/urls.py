@@ -10,6 +10,7 @@ urlpatterns = [
     path('test', views.test,name="test"),
     path('passengerdetails',views.passengerdetails,name="passengerdetails"),
     path('mybookings',views.mybookings,name="mybookings"),
+    path('busticket',views.busticket,name="busticket")
 #    path('mybookings/<int:pk>', views.bookingdetail,name="bookingdetail"),
 #    url(r'^mybookings/(?P<slug>[-\w]+)/$', views.bookingdetail, name='bookingdetail'),
 

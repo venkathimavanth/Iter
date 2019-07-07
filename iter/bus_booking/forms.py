@@ -126,6 +126,11 @@ class passenger_details(forms.Form):
         model = passenger
         fields = ['name','age','gender']
 
+class contactform(forms.Form):
+    phone_number = forms.CharField(min_length=10, max_length=10, required=True, widget=forms.TextInput())
+    email=forms.EmailField()
+    class Meta:
+        fields = ['phone_number','email']
 
 
 class bus_search(forms.Form):

@@ -11,11 +11,10 @@ class Place(models.Model):
     country=models.CharField( max_length=100)
     state=models.CharField( max_length=10)
     rating=models.IntegerField()
-    open_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(24)])
-    close_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(24)])
-    stay_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(24)])
-    preferred_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(24)])
-    pic=models.ImageField(upload_to="places",default="places/default.jpg")
+    open_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
+    close_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
+    stay_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
+    preferred_time=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1440)])
 
 class Trip(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)

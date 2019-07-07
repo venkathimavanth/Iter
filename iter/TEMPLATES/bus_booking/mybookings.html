@@ -109,12 +109,15 @@ span{
                   </div>
                   <div class="modal-body">
                   <h3>Ticket Id : {{b.booking_id}}</h3>
+                  <h2>Fare : {{b.fare}}</h2><br>
                   {% for key,value in passengers.items %}
 
                   {% if key == b.booking_id%}
                   {% for a in value %}
                   <h4>Passenger Name : {{a.name}}</h4>
                   <h5>Seat : {{a.seatno}}</h5>
+                  <br>
+
                   {% endfor%}
                   {% endif %}
                   {%endfor%}

@@ -32,7 +32,22 @@
 
 
     {% csrf_token %}
+
     {{ form.management_form }}
+    <div class="row">
+  <div class="col">
+      <input style="width:100%;height:40px" type="text" placeholder="    phone_number" name="phone_number"/>
+
+  </div>
+    </div>
+  <br>
+  <div class="row">
+<div class="col">
+    <input style="width:100%;height:40px" type="email" placeholder="    Email" name="email"/>
+</div>
+  </div>
+<br>
+
   <table class="table">
     <tr>
       <th>Name</th>
