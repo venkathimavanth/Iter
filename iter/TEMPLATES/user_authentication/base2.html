@@ -52,6 +52,8 @@
 	          <li class="nav-item active"><a href="{% url 'hotel_booking:hotels' %}" class="nav-link">Hotels</a></li>
 
       {% if request.user.is_authenticated %}
+      <li class="nav-item"><a href="#" class="nav-link">Plan Trip</a></li>
+
       <li class="nav-item dropdown">
            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
              My bookings
@@ -74,7 +76,6 @@
             </li>
 
 
-            <li class="nav-item"><a href="#" class="nav-link">Plan Trip</a></li>
 
 
       {% else %}
