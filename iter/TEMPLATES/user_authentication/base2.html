@@ -59,11 +59,23 @@
            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
              <a class="dropdown-item" href="{% url 'bus_booking:mybookings' %}">Bus Bookings</a>
              <a class="dropdown-item" href="{% url 'hotel_booking:myhotelbookings' %}">Hotel Bookings</a>
+             <a class="dropdown-item" href="#">My trips</a>
+
            </div>
          </li>
+         <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{request.user}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'user_authentication:edit_profile' %}">Edit Profile</a>
+                <a class="dropdown-item" href="{% url 'user_authentication:logout' %}">Logout</a>
+              </div>
+            </li>
 
-            <li class="nav-item"><a href="{% url 'user_authentication:edit_profile' %}" class="nav-link">{{request.user}}</a></li>
-	          <li class="nav-item"><a href="{% url 'user_authentication:logout' %}" class="nav-link">Logout</a></li>
+
+            <li class="nav-item"><a href="#" class="nav-link">Plan Trip</a></li>
+
 
       {% else %}
 	          <li class="nav-item active"><a href="{% url 'user_authentication:signup' %}" class="nav-link">Signup</a></li>
