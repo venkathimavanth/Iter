@@ -27,10 +27,18 @@
         <div class="col-1"></div>
         <div class="col-3" style="border-right:1px solid #d5d5d5;">
           <button type="button" class="btn btn-default" aria-label="Left Align">
-            <a href="#">back</a>
+{% if request.user.profile.user_type == 'B'%}
+            <a href="{% url 'bus_vendor:buses' %}">back</a>
               <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+{% elif request.user.profile.user_type == 'H'%}
+<a href="{% url 'hotel_vendor:home' %}">back</a>
+  <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 
+{% elif request.user.profile.user_type == 'C'%}
+<a href="{% url 'bus_booking:buses' %}">back</a>
+  <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 
+{% endif %}
       </button>
 
           <center>

@@ -183,8 +183,13 @@ def user_login(request):
             x = Profile.objects.get(user=admin)
             if admin.is_active and x.user_type == 'H':
                 login(request,admin)
+                if Bus_agency.objects.filter(user=request.user):
+                    return HttpResponseRedirect("/hotel_vendor/home")
+                else:
+                    return HttpResponseRedirect("/hotel_vendor/add_hotel")
+
                 #return HttpResponseRedirect(reverse('hotel_vendor:home'))
-                return HttpResponse("logged in")
+                return HttpResponseRedirect('hotel_vendor:hotels')
             elif admin.is_active and x.user_type == 'C':
                 login(request,admin)
                 #return HttpResponseRedirect(reverse('cus_login:home'))
@@ -271,7 +276,12 @@ def activate(request, uidb64, token):
         user.profile.save()
 
         login(request, user)
-        return redirect(reverse('user_authentication:edit_profile'))
+        if request.user.profile.user_type=='C':
+            return redirect(reverse('bus_booking:buses'))
+        if request.user.profile.user_type=='B':
+            return redirect(reverse('bus_vendor:list_agency'))
+        if request.user.profile.user_type=='H':
+            return redirect(reverse('hotel_vendor:add_hotel'))
 
     else:
         return HttpResponse('Activation link is invalid!')

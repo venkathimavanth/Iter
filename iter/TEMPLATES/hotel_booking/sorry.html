@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'user_authentication/base.html' %}
+{% load staticfiles %}
+
+<html lang="en" dir="ltr">
+{% block extrahead %}
+    <meta charset="utf-8">
+    <title></title>
+{% endblock %}
+
+<body>
+{% block body %}
+<br><br><br><br><br><br><br><br>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+      $(function(){
+          var time = 5;
+
+          function redirect(){
+            setTimeout(redirect,1000);
+            $(".timer").html(time)
+            if(time == 0)
+            {
+                window.location.href = '{% url "hotel_booking:hotels" %}'
+            }
+            time--;
+          }
+          redirect()
+        });
+      </script><br>
+    <center><img src="{% static "hotel_booking/images/7YUz.gif" %}" width="80px" height = "80px"></center>
+
+   <center>  <h1>
+      Sorry! the room {{ r.room_type }} {{ r.room_fac }} you have chosen in {{ hotel.name }} is already booked. Please check the list before selecting a room. Thank You.<br>
+      You will be redirected to our webpage in <span class = "timer">0</span> seconds</h1></center><br><br><br>
+
+      <br><br><br><br><br><br>
+{% endblock %}
+</body>
+</html>

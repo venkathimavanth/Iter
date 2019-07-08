@@ -1,8 +1,8 @@
 from django import forms
-from hotel_booking.models  import Hotels,Rooms
+from django.forms import ClearableFileInput
+from hotel_booking.models  import Hotels,Rooms,Image
 
 class hotel_details(forms.Form):
-
     name=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
     address=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
     city=forms.CharField(min_length=1,max_length=100,required=True,widget=forms.TextInput())
@@ -42,3 +42,11 @@ class room_details(forms.Form):
     class Meta:
         model = Rooms
         fields = ['room_type','room_fac','cost','price','availability','capacity']
+
+#class AddhotelForm(forms.ModelForm):
+#    class Meta:
+#        model = Image
+#        fields = ['image']
+#        widgets = {
+#            'image': ClearableFileInput(attrs={'multiple': True}),
+#        }

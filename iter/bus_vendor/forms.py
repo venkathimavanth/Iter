@@ -45,7 +45,7 @@ class bus_details(forms.Form):
             'class': 'form-control datetimepicker-input',
             'data-target': '#datetimepicker2'
         }))
-    journeytime=forms.IntegerField()    
+    journeytime=forms.IntegerField()
 
     class Meta:
         model = Bus
@@ -60,7 +60,7 @@ class via_details(forms.Form):
 
     class Meta:
         model = via
-        fields = ['place_name','reach','serviceno','distance_from_startcity']
+        fields = ['place_name','reach','serviceno','distance_from_startcity','journeytime']
 
 class date_test(forms.Form):
 

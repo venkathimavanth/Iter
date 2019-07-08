@@ -1,0 +1,84 @@
+{% load static %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+
+<!DOCTYPE html>
+<html>
+{% block extraheader %}
+		<title>Add Hotel</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- LINEARICONS -->
+    <link rel="stylesheet" href='{% static "hotel_vendor/fonts/linearicons/style.css" %}'>
+
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href='{% static "hotel_vendor/css/style.css" %}'>
+{% endblock %}
+
+{% block body %}
+	<body>
+		<div class="wrapper">
+			<div class="inner">
+				<img src='{% static "hotel_vendor/images/image-1.png" %}' alt="" class="image-1">
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+
+					<h3>New Hotel?</h3>
+					<div class="form-holder">
+						<span class="lnr lnr-user"></span>
+						<input type="text" class="form-control" name="hname" placeholder="Hotelname">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-map-marker"></span>
+						<input type="text" class="form-control"  name="address" placeholder="Address">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-map"></span>
+						<input type="text" class="form-control" name="city" placeholder="City">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-map"></span>
+						<input type="text" class="form-control" name="state" placeholder="State">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-map"></span>
+						<input type="text" class="form-control" name="country" placeholder="Country">
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-phone-handset"></span>
+						<input type="text" class="form-control" name="phone_number" placeholder="Phone Number">
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-envelope"></span>
+						<input type="text" class="form-control" placeholder="Mail" name="email">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-magnifier"></span>
+						<input type="text" class="form-control" name="description" placeholder="Description">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-earth"></span>
+						<input type="number" class="form-control" step="any" name="lat" placeholder="Latitude">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-earth"></span>
+						<input type="number" class="form-control" name="long" step="any" placeholder="Longitude">
+					</div>
+          <div class="form-holder">
+						<input type="file" name="images" class="form-control" multiple>
+					</div>
+					<button type="submit">
+						<span>Register</span>
+					</button>
+				</form>
+				<img src='{% static "hotel_vendor/images/image-2.png" %}' alt="" class="image-2">
+			</div>
+
+		</div>
+
+		<script src='{% static "hotel_vendor/js/jquery-3.3.1.min.js" %}'></script>
+		<script src='{% static "hotel_vendor/js/main.js" %}'></script>
+	</body>
+	{% endblock %}
+</html>

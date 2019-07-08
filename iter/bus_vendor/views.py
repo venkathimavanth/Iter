@@ -6,6 +6,7 @@ from user_authentication.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse,HttpResponseRedirect
 from datetime import datetime,timedelta
+from django.urls import reverse
 # Create your views here.
 @login_required
 def list_agency(request):
@@ -48,7 +49,8 @@ def add_bus(request):
                 start=form.cleaned_data.get('start')
                 reach=form.cleaned_data.get('reach')
                 date=start.date()
-                data=Bus.objects.create(Bus_type=bus_type,Bus_model=bus_model,costperkm=costperkm,serviceno=serviceno,noseats=noseats,start=start,reach=reach,date=date,start_city=start_city,destination_city=destination_city,agency=agency)
+                journeytime=form.cleaned_data.get('journeytime')
+                data=Bus.objects.create(Bus_type=bus_type,Bus_model=bus_model,costperkm=costperkm,journeytime=journeytime,serviceno=serviceno,noseats=noseats,start=start,reach=reach,date=date,start_city=start_city,destination_city=destination_city,agency=agency)
                 data.save()
                 return redirect( 'bus_vendor:date_testing' ,pk=serviceno )
             else:
@@ -69,13 +71,15 @@ def add_via(request,pk):
             print(request.user)
 
             form=via_details(request.POST,request.user)
+            print(form.errors)
             if form.is_valid():
                 bus=Bus.objects.get(serviceno=form.cleaned_data.get('serviceno'))
                 place_name=form.cleaned_data.get('place_name')
                 reach=form.cleaned_data.get('reach')
                 distance=form.cleaned_data.get('distance_from_startcity')
+                journeytime=form.cleaned_data.get('journeytime')
 
-                data=via.objects.create(place_name=place_name,reach=reach,distance_from_startcity=distance,bus=bus)
+                data=via.objects.create(place_name=place_name,reach=reach,distance_from_startcity=distance,journeytime=journeytime,bus=bus)
                 data.save()
 
                 bus=Bus.objects.get(serviceno=form.cleaned_data.get('serviceno'))
@@ -93,8 +97,9 @@ def add_via(request,pk):
                 bus.seats_available=k
                 bus.save()
 
-                return render(request,'bus_vendor/home.html')
+                return redirect(reverse('bus_vendor:current_buses'))
             else:
+                print(form.errors)
                 form=via_details()
                 return render(request,'bus_vendor/via.html',{'form':form,'pk':pk})
         else:

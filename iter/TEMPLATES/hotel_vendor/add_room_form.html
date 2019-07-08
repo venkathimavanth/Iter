@@ -1,0 +1,72 @@
+{% load static %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+
+<!DOCTYPE html>
+<html>
+{% block extraheader %}
+		<title>Add Rooms</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- LINEARICONS -->
+    <link rel="stylesheet" href='{% static "hotel_vendor/fonts/linearicons/style.css" %}'>
+
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href='{% static "hotel_vendor/css/style.css" %}'>
+{% endblock %}
+
+{% block body %}
+	<body>
+		<div class="wrapper">
+			<div class="inner">
+        <img src='{% static "hotel_vendor/images/image-1.png"}' alt="" class="image-1">
+				<form method="POST">
+          {% csrf_token %}
+					<h3>New Room?</h3>
+					<div class="form-holder">
+						<span class="lnr lnr-home"></span>
+						<select class="form-control" name= "room_type" placeholder="Room type">
+              <option>Room</option>
+              <option>Standard Double Room</option>
+              <option>Standard Family Room</option>
+              <option>Deluxe Double Room</option>
+            </select>
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-home"></span>
+						<select class="form-control" name="room_fac" placeholder="Room facility">
+              <option>Non-AC</option>
+              <option>AC</option>
+            </select>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-chart-bars"></span>
+						<input type="number" step="any" class="form-control" name="price" placeholder="Price">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-chart-bars"></span>
+						<input type="number" step="any" class="form-control" name="cost" placeholder="Cost">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-thumbs-up"></span>
+						<input type="number" class="form-control" name="avail" placeholder="Availability">
+					</div>
+          <div class="form-holder">
+						<span class="lnr lnr-chart-users"></span>
+						<input type="number" class="form-control" name="num_per" placeholder="num_per">
+					</div>
+					<button>
+						<span>Register</span>
+					</button>
+				</form>
+        <img src='{% static "hotel_vendor/images/image-2.png" %}' alt="" class="image-2">
+			</div>
+
+		</div>
+
+    <script src='{% static "hotel_vendor/js/jquery-3.3.1.min.js" %}'></script>
+		<script src='{% static "hotel_vendor/js/main.js" %}'></script>
+	</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+  {% endblock %}
+</html>
