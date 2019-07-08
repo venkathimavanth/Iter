@@ -177,8 +177,8 @@
 <form method="POST" action="{% url 'trip_plan' %}">
     {% csrf_token %}
     <input type="text" id="final-list" name="final-list" value="" style="visibility: hidden;">
-    <input type="submit" id="final-list-submit" name="final-list-submit" value="Find My ITER" class="button button4" disabled>
     <i id="submit-disable" style="display:block">#Please select atleast 1 place to visit</i>
+    <input type="submit" id="final-list-submit" name="final-list-submit" value="Find My ITER" class="button button4" disabled>
 </form>
 
 <br><br><br><br><br><br><br><br><br>
