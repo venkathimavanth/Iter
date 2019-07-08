@@ -1,0 +1,122 @@
+{% extends 'user_authentication/base2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Bus Ticket</title>
+    {% block extrahead %}
+    <style media="screen">
+      #nava{
+        padding-left:650px
+      }
+
+    </style>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+    <div class="card container" style="margin-top:5%;margin-bottom:10%">
+      <div class="row w-25 p-3">
+        <div class="row">
+
+
+        <div class="col-lg-4" style="margin-left:10%">
+        <img src="{% static 'images/bus.png' %}" style="width:100px;height:auto"></img>
+
+        </div>
+        &nbsp&nbsp&nbsp&nbsp
+        <div  style="margin-left:13%;margin-top:13%">
+        <h3><i>iter.com</i></h3>
+</div>
+          </div>
+      </div>
+      <hr style="margin-top:-1%">
+      <div class="row" style="margin-left:3%;margin-top:-2%">
+
+
+      <div class="col-md-4">
+
+
+        <h3>{{book.start_city}}       &nbsp&nbsp  <img  src="{% static 'images/arrow.png' %}" style="width:30px;height:auto"></img>&nbsp&nbsp {{book.destination_city}}
+</h3>
+        </div>
+        <div class="col-md-3">
+          <h3>Jan,23,2019 </h3>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col">
+          <h4>Ticket ID  :{{book.booking_id}} </h4>
+
+        </div>
+
+</div>
+<hr style="margin-top:-1px">
+<div style="margin-left:20px" class="row">
+  <div  class="col-md-3">
+    <h5 ><b>{{book.serviceno.agency.name}}</b></h5>
+    <p>{{book.Bus_model}}</p>
+  </div>
+  <div  class="col-md-3">
+    <h4 ><b>{{book.start.time}}</b></h4>
+    <p>Reporting Time</p>
+
+  </div>
+  <div  class="col-md-3">
+    <h4 ><b>{{book.reach.time}}</b></h4>
+    <p>Departure Time</p>
+
+  </div>
+  <div  class="col-md-3">
+    <h4 ><b>
+{% for p in passe %}
+{{p.seatno}},
+{% endfor %}
+    </b></h4>
+    <p>Seats</p>
+  </div>
+
+</div>
+<hr style="margin-top:-1px">
+<div class="row" style="margin-left:20px">
+  {% for p in passe %}
+  <div  class="col-md-3">
+    <h4 ><b>{{p.name}}</b></h4>
+    <p>{{p.seatno}}</p>
+
+  </div>
+  {% endfor %}
+
+</div>
+<hr style="margin-top:-1px;">
+<div class="row" style="margin-left:20px; margin-bottom:20px">
+  <div  class="col-md-3">
+  </div>
+  <div  class="col-md-3">
+  </div>
+  <div  class="col-md-3">
+  </div>
+  <div  class="col-md-3">
+<h3>Fare  :  Rs {{book.fare}}</h3>
+
+  </div>
+
+</div>
+
+    </div>
+    {% endblock %}
+  </body>
+</html>

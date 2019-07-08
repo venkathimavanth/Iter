@@ -41,12 +41,16 @@ span{
 .fa{
      color:#4183D7;
 }
+#nava{
+  padding-left:700px
+}
       </style>
       {% endblock %}
   </head>
   <body>
     {% block body %}
     <div class="box">
+      {% if buses %}
         <div class="container">
          	<div class="row">
             {%for b in buses%}
@@ -73,7 +77,8 @@ span{
 
     						<a href="#" data-toggle="modal" data-target="#{{b.0.serviceno}}">Learn More</a>&nbsp
                 <a href="{% url 'bus_vendor:passengerlist' b.0.serviceno %}" >See bookings</a>&nbsp
-                <a href="{% url 'bus_vendor:via' b.0.serviceno %}" >Add via</a>
+                <a href="{% url 'bus_vendor:via' b.0.serviceno %}" >Add via</a>&nbsp
+                <a href="{% url 'bus_vendor:date_testing' b.0.serviceno %}" >Add dates</a>
 
     					 </div>
     				</div>
@@ -120,7 +125,7 @@ span{
                 </tr>
 
                   </table>
-                  </div>
+{% if b.1 %}
                   <div style="margin:2%">
                   <div><h4>Vias</h4></div>
                   <hr>
@@ -145,6 +150,13 @@ span{
 
                   </div>
                   </div>
+{% endif %}                  
+                  <br>
+                  &nbsp&nbsp
+                  {% for d in b.2 %}
+                    {{d.date.date}}&nbsp
+                  {% endfor %}
+                    </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                   </div>
@@ -156,7 +168,20 @@ span{
             {% endfor %}
     		</div>
         </div>
+        {% else %}
+        <center>
+        <div class="row">
+        <div class="col-12">
+          <br>
+          <img src="{% static 'images/bus-icon.jpg' %}" style="width:200px;height:auto"></img>
+
+        <h1>NO BUSES TO SHOW</h1>
+        </div>
+        </div>
+        </center>
+        {% endif %}
     </div>
     {% endblock  %}
+
   </body>
 </html>

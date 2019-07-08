@@ -1,4 +1,4 @@
-{% extends 'bus_vendor/base.html' %}
+{% extends 'user_authentication/base2.html' %}
 {% load static %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
@@ -16,7 +16,7 @@
 
 
 {% block body%}
-<div class="limiter" style="margin-top:-5%">
+<div class="limiter" >
 	<div class="container-login100">
 		<div class="wrap-login100 p-t-50 p-b-90">
 			<form class="login100-form validate-form flex-sb flex-w" method="POST">
@@ -39,13 +39,15 @@
 						<span >
 							Not a member?
 						</span>
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="{% url 'password_reset' %}" class=" txt1">
+							Forgot?
+						</a>
+
+						<br>
 						<a href="{% url 'user_authentication:signup' %}" >
 							Sign up now
 						</a>
 
-						<a href="{% url 'password_reset' %}" class="txt1">
-							Forgot?
-						</a>
 					</div>
 				</div>
 

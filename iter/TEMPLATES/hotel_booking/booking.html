@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block extrahead %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Tourists Reservation Form template Responsive, Login form web template,Flat Pricing tables,Flat Drop downs Sign up Web Templates,
+ Flat Web Templates, Login sign up Responsive web template, SmartPhone Compatible web template, free web designs for Nokia, Samsung, LG, SonyEricsson, Motorola web design">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Custom Theme files -->
+<link href='{% static "Booking/css/font-awesome.css" %}' rel="stylesheet">
+<link href='{% static "Booking/css/wickedpicker.css" %}' rel="stylesheet" type='text/css' media="all" />
+<link href='{% static "Booking/css/style.css" %}' rel='stylesheet' type='text/css' />
+<!--fonts-->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+<link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+{% endblock %}
+
+<body>
+{% block body %}
+<!--background-->
+<h1> Hotel Booking Form </h1>
+    <div class="bg-agile">
+	<div class="book-reservation">
+      <form action="#" method="post">
+        {% csrf_token %}
+          <div class="form-date-w3-agileits">
+            <label><i class="fa fa-user" aria-hidden="true"></i>First Name:</label>
+            <input type="text" name="fname" placeholder="First Name" required=""/>
+          </div>
+          <div class="form-date-w3-agileits">
+            <label><i class="fa fa-user" aria-hidden="true"></i>Last Name :</label>
+            <input type="text" name="lname" placeholder="Last Name" required=""/>
+          </div>
+          <div class="form-date-w3-agileits">
+            <label><i class="fa fa-user" aria-hidden="true"></i>Age :</label>
+            <input type="text" name="age" placeholder="age" required=""/>
+          </div>
+          <div class="form-date-w3-agileits">
+            <label><i class="fa fa-mars" aria-hidden="true"></i>Gender :</label>
+            <input type="text" name="gender" placeholder="gender" required=""/>
+          </div>
+           <div class="form-date-w3-agileits">
+            <label><i class="fa fa-calendar" aria-hidden="true"></i> Arrival Date :</label>
+            <input  id="datepicker1" name="Arr_date" type="text" value="yy-mm-dd" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'yy-mm-dd';}" required="">
+          </div>
+          <div class="form-time-w3layouts">
+              <label><i class="fa fa-clock-o" aria-hidden="true"></i> Time :</label>
+              <input type="text" name="Stime" class="timepicker form-control" value="Hrs:Min">
+          </div>
+          <div class="form-date-w3-agileits">
+            <label><i class="fa fa-calendar" aria-hidden="true"></i> Departure Date :</label>
+            <input  id="datepicker2" name="Dep_date" type="text" value="yy-mm-dd" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'yy-mm-dd';}" required="">
+          </div>
+          <div class="form-time-w3layouts">
+              <label><i class="fa fa-clock-o" aria-hidden="true"></i> Time :</label>
+              <input type="text" name="Etime" class="timepicker form-control" value="Hrs:Min">
+          </div>
+          <div class="form-left-agileits-w3layouts bottom-w3ls">
+              <label><i class="fa fa-home" aria-hidden="true"></i> Choose a Room :</label>
+              <select class="form-control" name="room_type">
+                <option>Room</option>
+                <option>Standard Double Room</option>
+                <option>Standard Family Room</option>
+                <option>Deluxe Double Room</option>
+              </select>
+          </div>
+          <div class="form-left-agileits-w3layouts">
+              <label><i class="fa fa-users" aria-hidden="true"></i> Facility :</label>
+              <select class="form-control" name="room_fac">
+                <option>Non-AC</option>
+                <option>AC</option>
+              </select>
+          </div>
+          <div class="clear"> </div>
+          <div class="make">
+              <input type="submit" value="Make a Reservation">
+          </div>
+      </form>
+		</div>
+   </div>
+<!--
+			<div class="copy w3ls">
+		       <p>Copyright 2017 Tourists Reservation Form . All Rights Reserved  | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+	        </div>-->
+		<script type="text/javascript" src='{% static "Booking/js/jquery-2.1.4.min.js" %}'></script>
+		<script type="text/javascript" src='{% static "Booking/js/wickedpicker.js" %}'></script>
+			<script type="text/javascript">
+				$('.timepicker').wickedpicker({twentyFour: false});
+			</script>
+
+
+		<!-- Calendar -->
+				<link rel="stylesheet" href='{% static "Booking/css/jquery-ui.css" %}' />
+				<script src='{% static "Booking/js/jquery-ui.js" %}'></script>
+				  <script>
+						  $(function() {
+							$( "#datepicker,#datepicker1,#datepicker2,#datepicker3" ).datepicker({ minDate: 0, maxDate: "+12M" , dateFormat: "yy-mm-dd"});
+              } );
+				  </script>
+			<!-- //Calendar -->
+
+
+</body>
+{% endblock %}
+</html>

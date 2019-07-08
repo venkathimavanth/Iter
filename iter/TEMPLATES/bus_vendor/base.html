@@ -2,185 +2,183 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
-<!DOCTYPE HTML>
-<html>
-	<head>
 
-	<meta charset="utf-8">
-	<title>ITER</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
 
+    <title>Adventure - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
 
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/animate.css" %}> -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/icomoon.css" %}> -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/bootstrap.css" %}> -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/magnific-popup.css" %}> -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/flexslider.css" %}> -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/owl.carousel.min.css" %}> -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/owl.theme.default.min.css" %}> -->
+    <link rel="stylesheet" href={% static "bus_booking/css/open-iconic-bootstrap.min.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/animate.css" %}>
 
-	<!-- Date Picker -->
-	<!-- <link rel="stylesheet" href={% static "bus_vendor/css/bootstrap-datepicker.css" %}> -->
-	<!-- Flaticons  -->
-	<link rel="stylesheet" href={% static "bus_vendor/fonts/flaticon/font/flaticon.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/owl.carousel.min.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/owl.theme.default.min.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/magnific-popup.css" %}>
 
-	<!-- Theme style  -->
-	<link rel="stylesheet" href={% static "bus_vendor/css/style.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/aos.css" %}>
 
-  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
+    <link rel="stylesheet" href={% static "bus_booking/css/ionicons.min.css" %}>
 
-  <link rel="stylesheet" href={% static "bus_booking/css/open-iconic-bootstrap.min.css" %}>
-  <link rel="stylesheet" href={% static "bus_booking/css/animate.css" %}>
-
-  <link rel="stylesheet" href={% static "bus_booking/css/owl.carousel.min.css" %}>
-  <link rel="stylesheet" href={% static "bus_booking/css/owl.theme.default.min.css" %}>
-  <link rel="stylesheet" href={% static "bus_booking/css/magnific-popup.css" %}>
-
-  <link rel="stylesheet" href={% static "bus_booking/css/aos.css" %}>
-
-  <link rel="stylesheet" href={% static "bus_booking/css/ionicons.min.css" %}>
-
-  <!-- <link rel="stylesheet" href={% static "bus_booking/css/bootstrap-datepicker.css" %}> -->
-  <!-- <link rel="stylesheet" href={% static "bus_booking/css/jquery.timepicker.css" %} -->
+    <link rel="stylesheet" href={% static "bus_booking/css/bootstrap-datepicker.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/jquery.timepicker.css" %}
 
 
-  <link rel="stylesheet" href={% static "bus_booking/css/flaticon.css" %}>
-  <link rel="stylesheet" href={% static "bus_booking/css/icomoon.css" %}>
-  <link rel="stylesheet" href={% static "bus_booking/css/style.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/flaticon.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/icomoon.css" %}>
+    <link rel="stylesheet" href={% static "bus_booking/css/style.css" %}>
+    {%block extrahead %}
+    {%endblock%}
+  </head>
+  <body>
 
 
-	<!-- Modernizr JS -->
-	<script src={% static "bus_vendor/js/modernizr-2.6.2.min.js" %}></script>
-{% block extrahead%}
-{% endblock %}
-	</head>
-	<body>
+	  <nav class="navbar navbar-expand-lg fixed-top navbar-light ftco_navbar bg-light " id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="index.html">Iter</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
 
-	<div class="colorlib-loader"></div>
+	      <div class="collapse navbar-collapse" id="nava">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item"><a href="{% url 'bus_vendor:current_buses' %}" class="nav-link">Buses</a></li>
+
+	          <li class="nav-item"><a href="{% url 'bus_vendor:add_bus' %}" class="nav-link">Add Bus</a></li>
 
 
-		<nav class="colorlib-nav" role="navigation">
-			<div class="top-menu">
-				<div class="container">
-					<div class="row">
-						<div class="col-xs-2">
-							<div id="colorlib-logo"><a href="index.html">ITER</a></div>
-						</div>
-						<div class="col-xs-10 text-right menu-1" id="nava" >
-							<ul  style="align:top-right">
-								<li class="active"><a href="{% url 'bus_vendor:current_buses' %}">Buses</a></li>
-								<li onclick="" ><a href="{% url 'bus_vendor:add_bus' %}">Add Bus</a></li>
-								<li><a href="{% url 'bus_vendor:edit_agency' %}">Agency details</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
-		<hr style="border: 1px solid ">
-{% block body%}
-{% endblock %}
-		<footer class="ftco-footer ftco-bg-dark ftco-section" style="margin-top:10%">
-			<div class="container">
-				<div class="row mb-5">
-					<div class="col-md">
-						<div class="ftco-footer-widget mb-4">
-							<h2 class="ftco-heading-2">Adventure</h2>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-							<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
-								<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-								<li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-								<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md">
-						<div class="ftco-footer-widget mb-4 ml-md-4">
-							<h2 class="ftco-heading-2">Information</h2>
-							<ul class="list-unstyled">
-								<li><a href="#" class="py-2 d-block">About Us</a></li>
-								<li><a href="#" class="py-2 d-block">Online enquiry</a></li>
-								<li><a href="#" class="py-2 d-block">Call Us</a></li>
-								<li><a href="#" class="py-2 d-block">General enquiries</a></li>
-								<li><a href="#" class="py-2 d-block">Booking Conditions</a></li>
-								<li><a href="#" class="py-2 d-block">Privacy and Policy</a></li>
-								<li><a href="#" class="py-2 d-block">Refund policy</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md">
-						 <div class="ftco-footer-widget mb-4">
-							<h2 class="ftco-heading-2">Experience</h2>
-							<ul class="list-unstyled">
-								<li><a href="#" class="py-2 d-block">Beach</a></li>
-								<li><a href="#" class="py-2 d-block">Adventure</a></li>
-								<li><a href="#" class="py-2 d-block">Wildlife</a></li>
-								<li><a href="#" class="py-2 d-block">Honeymoon</a></li>
-								<li><a href="#" class="py-2 d-block">Nature</a></li>
-								<li><a href="#" class="py-2 d-block">Party</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md">
-						<div class="ftco-footer-widget mb-4">
-							<h2 class="ftco-heading-2">Have a Questions?</h2>
-							<div class="block-23 mb-3">
-								<ul>
-									<li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-									<li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-									<li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12 text-center">
+            <li class="nav-item"><a href="{% url 'bus_vendor:edit_agency' %}" class="nav-link">Agency details</a></li>
+						<li class="nav-item dropdown">
+								 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									 {{request.user}}
+								 </a>
+								 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									 <a class="dropdown-item" href="{% url 'user_authentication:edit_profile' %}">Edit Profile</a>
+									 <a class="dropdown-item" href="{% url 'user_authentication:logout' %}">Logout</a>
+								 </div>
+							 </li>
 
-						<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-	Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-	<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-					</div>
-				</div>
-			</div>
-		</footer>
+
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+    {%block body %}
+    {% endblock%}
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Adventure</h2>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
+                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Information</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">About Us</a></li>
+                <li><a href="#" class="py-2 d-block">Online enquiry</a></li>
+                <li><a href="#" class="py-2 d-block">Call Us</a></li>
+                <li><a href="#" class="py-2 d-block">General enquiries</a></li>
+                <li><a href="#" class="py-2 d-block">Booking Conditions</a></li>
+                <li><a href="#" class="py-2 d-block">Privacy and Policy</a></li>
+                <li><a href="#" class="py-2 d-block">Refund policy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+             <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Experience</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">Beach</a></li>
+                <li><a href="#" class="py-2 d-block">Adventure</a></li>
+                <li><a href="#" class="py-2 d-block">Wildlife</a></li>
+                <li><a href="#" class="py-2 d-block">Honeymoon</a></li>
+                <li><a href="#" class="py-2 d-block">Nature</a></li>
+                <li><a href="#" class="py-2 d-block">Party</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+            	<h2 class="ftco-heading-2">Have a Questions?</h2>
+            	<div class="block-23 mb-3">
+	              <ul>
+	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+	              </ul>
+	            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
 
 
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 
-		<script type="text/javascript">
-		    $(document).ready(function () {
-		        var url = window.location;
-		        $('ul.nav a[href="'+ url +'"]').parent().addClass('active');
-		        $('ul.nav a').filter(function() {
-		             return this.href == url;
-		        }).parent().addClass('active');
-		    });
-		</script>
-	<!-- jQuery -->
-	<script src={% static "bus_vendor/js/jquery.min.js" %}></script>
-	<!-- jQuery Easing -->
-	<script src={% static "bus_vendor/js/jquery.easing.1.3.js" %}></script>
-	<!-- Bootstrap -->
-	<script src={% static "bus_vendor/js/bootstrap.min.js" %}></script>
-	<!-- Waypoints -->
-	<script src={% static "bus_vendor/js/jquery.waypoints.min.js" %}></script>
-	<!-- Flexslider -->
-	<script src={% static "bus_vendor/js/jquery.flexslider-min.js" %}></script>
-	<!-- Owl carousel -->
-	<script src={% static "bus_vendor/js/owl.carousel.min.js" %}></script>
-	<!-- Magnific Popup -->
-	<script src={% static "bus_vendor/js/jquery.magnific-popup.min.js" %}></script>
-	<script src={% static "bus_vendor/js/magnific-popup-options.js" %}></script>
-	<!-- Date Picker -->
-	<!-- <script src={% static "bus_vendor/js/bootstrap-datepicker.js" %}></script> -->
-	<!-- Main -->
-	<script src={% static "bus_vendor/js/main.js" %}></script>
+  <script src={% static "bus_booking/js/jquery.min.js" %}></script>
+  <script src={% static "bus_booking/js/jquery-migrate-3.0.1.min.js" %}></script>
+  <script src={% static "bus_booking/js/popper.min.js" %}></script>
+  <script src={% static "bus_booking/js/bootstrap.min.js" %}></script>
+  <script src={% static "bus_booking/js/jquery.easing.1.3.js" %}></script>
+  <script src={% static "bus_booking/js/jquery.waypoints.min.js" %}></script>
+  <script src={% static "bus_booking/js/jquery.stellar.min.js" %}></script>
+  <script src={% static "bus_booking/js/owl.carousel.min.js" %}></script>
+  <script src={% static "bus_booking/js/jquery.magnific-popup.min.js" %}></script>
+
+  <script src={% static "bus_booking/js/jquery.animateNumber.min.js" %}></script>
+  <script src={% static "bus_booking/js/bootstrap-datepicker.js" %}></script>
+  <script src={% static "bus_booking/js/scrollax.min.js" %}></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+<  <script src={% static "bus_booking/js/aos.js" %}></script>
+<  <script src={% static "bus_booking/js/main.js" %}></script>
 
 
-	</body>
+
+  </body>
 </html>
+
+<ul  style="align:top-right">
+	<li class="active"><a href="{% url 'bus_vendor:current_buses' %}">Buses</a></li>
+	<li onclick="" ><a href="{% url 'bus_vendor:add_bus' %}">Add Bus</a></li>
+	<li><a href="{% url 'bus_vendor:edit_agency' %}">Agency details</a></li>
+	<li><a href="{% url 'user_authentication:edit_profile' %}">{{request.user}}</a></li>
+	<li class="nav-item"><a href="{% url 'user_authentication:logout' %}" class="nav-link">Logout</a></li>
+	<li class="nav-item dropdown">
+			 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				 list property
+			 </a>
+			 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				 <a class="dropdown-item" href="{% url 'user_authentication:bussignup' %}">Bus Agency</a>
+				 <a class="dropdown-item" href="{% url 'user_authentication:hotelsignup' %}">Hotel</a>
+			 </div>
+		 </li>
+
+</ul>

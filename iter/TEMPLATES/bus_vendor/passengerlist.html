@@ -9,6 +9,11 @@
     <meta charset="utf-8">
     <title></title>
   {% block extrahead%}
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
   <style media="screen">
     @media print {
   body * {
@@ -24,7 +29,7 @@
   }
 }
 #nava{
-  padding-left: 700px
+  padding-left: 600px
 }
 
   </style>
@@ -32,8 +37,8 @@
   </head>
   <body>
     {% block body%}
-    <div style="margin-bottom:10%">
-    <form method="post">
+    <div style="margin-bottom:10%;margin-top:10%">
+    <form method="post" autocomplete="off">
       <div class="row">
       {% csrf_token%}
       <div class="col-5">
@@ -44,6 +49,13 @@
 
       </div>
       </div>
+      <script>
+        $(function () {
+          $("#id_date").datepicker({
+            format:'yyyy-mm-dd',
+          });
+        });
+      </script>
 
     </form>
     <br>

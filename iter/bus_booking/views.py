@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .forms import passenger_details,bus_search
+from django.shortcuts import render,redirect
+from .forms import passenger_details,bus_search,contactform
 from bus_booking.models import passenger,Bus_Booking,Bus,via,bus_dates
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,8 @@ import random
 import string
 import json
 from django.forms import formset_factory
+from datetime import datetime,timedelta
+from django.core.mail import EmailMessage, send_mail
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -23,7 +25,7 @@ def gen_booking_id(request):
 
 
 
-@login_required
+#@login_required(login_url='user_authentication:user_login')
 def passengerdetails(request):
     print('true')
     if request.method=='POST':
@@ -32,24 +34,55 @@ def passengerdetails(request):
         print(booking_id)
         bus=Bus.objects.get(serviceno=request.session['pk'])
         v=via.objects.filter(bus=bus)
+        dates=bus_dates.objects.filter(bus=bus)
         if bus.start_city==request.session['start_city']:
-            start=bus.start
+            print('here')
+            distance1=0
+            for d in dates:
+                print(d.date.date())
 
+                print(request.session['start_date'])
+                if str(d.date.date())==request.session['start_date']:
+                    b_s_d=d.date.date()
+                    start=d.date
+                    print('here1')
+                    j=bus.journeytime
+        for a in v:
+            if a.place_name.lower()==request.session['start_city'].lower():
+                distance1=0
+                for d in dates:
+                    if (d.date + timedelta(minutes=a.journeytime)).date()==request.session['start_date']:
+                        b_s_d=d.date.date()
+                        start=d.date + timedelta(minutes=a.journeytime)
+                        j=a.journeytime
+            if a.place_name.lower()==request.session['destination_city'].lower():
+                distance2=a.distance_from_startcity
+                reach=start + timedelta(minutes=(a.journeytime - j))
 
         if bus.destination_city==request.session['destination_city']:
-            reach=bus.reach
-        for a in v:
-            if a.place_name==request.session['start_city']:
-                start=a.reach
-            if a.place_name==request.session['destination_city']:
-                reach=a.reach
-        data1=Bus_Booking.objects.create(bus_type=bus.Bus_type,Bus_model=bus.Bus_model,start_city=request.session['start_city'],destination_city=request.session['destination_city'],bus_start_date=bus.date,start=start,reach=reach,serviceno=bus,booking_id=booking_id,phone_number='8179033301',user=request.user)
-        data1.save()
+            distance2=bus.distance_from_startcity
+            reach=start + timedelta(minutes=j)
+        conform=contactform(request.POST)
+        s=request.session['seats_selected']
+        fare=(distance2 - distance1)*bus.costperkm * len(s)
+
+        if conform.is_valid():
+            phone_number=conform.cleaned_data.get('phone_number')
+            email=conform.cleaned_data.get('email')
+            if request.user.is_authenticated:
+
+                data1=Bus_Booking.objects.create(bus_type=bus.Bus_type,fare=fare,Bus_model=bus.Bus_model,start_city=request.session['start_city'],destination_city=request.session['destination_city'],bus_start_date=b_s_d,start=start,reach=reach,serviceno=bus,booking_id=booking_id,phone_number=phone_number,email=email,user=request.user)
+                data1.save()
+            else:
+                data1=Bus_Booking.objects.create(bus_type=bus.Bus_type,fare=fare,Bus_model=bus.Bus_model,start_city=request.session['start_city'],destination_city=request.session['destination_city'],bus_start_date=b_s_d,start=start,reach=reach,serviceno=bus,booking_id=booking_id,phone_number=phone_number,email=email)
+                data1.save()
+
         formi=formset_factory(passenger_details)
         forma=formi(request.POST)
         print(request.POST)
         s=request.session['seats_selected']
         n=-1
+        messages=''
         if forma.is_valid():
             print('true')
             for f in forma:
@@ -62,15 +95,29 @@ def passengerdetails(request):
                 bok=Bus_Booking.objects.get(booking_id=booking_id)
                 data=passenger.objects.create(name=name,gender=gender,age=age,seatno=seatno,booking_id=bok)
                 data.save()
-        print(forma.errors)
-        return render(request,'bus_booking/home.html')
+                messages=messages+'Passenger Name  :'+str(name)+"\n"+'Gender  :'+str(gender)+"\n"+'Age  :'+str(age)+"\n"+'Seat No  :'+str(seatno)+'\n'
+            mail_subject = 'Activate your Iter account.'
+            message = str(messages)
+            to_email = conform.cleaned_data.get('email')
+            email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+            )
+            email.send()
+
+
+            book=Bus_Booking.objects.get(booking_id=booking_id)
+            passe=passenger.objects.filter(booking_id=book)
+            print(forma.errors)
+            return render(request,'bus_booking/busticket.html',{'book':book,'passe':passe})
     else:
         j=request.session['noss']
         form = formset_factory(passenger_details, extra=j-1, min_num=1)
         print('true')
-        return render(request,'bus_booking/passenger_details.html',{'form':form})
+        conform=contactform()
+        return render(request,'bus_booking/passenger_details.html',{'form':form,'contactaform':conform})
 
 def buses(request):
+
     if request.method=='POST':
         print("posted")
         form = bus_search(request.POST)
@@ -86,9 +133,6 @@ def buses(request):
 
 
             print(start_date)
-            bus=Bus.objects.get(serviceno="12346")
-            print("agency/n")
-            print(bus.agency.name)
             buses=Bus.objects.all()
             print(buses)
             bus_list=[]
@@ -302,8 +346,9 @@ def bus_detail(request,pk):
         request.session['noss']=j
         request.session['seats_selected']=seats_selected
         form = formset_factory(passenger_details, extra=j-1, min_num=1)
+        conform=contactform()
 
-        return render(request,'bus_booking/passenger_details.html',{'form':form})
+        return render(request,'bus_booking/passenger_details.html',{'form':form,'contactaform':conform})
 
     elif pk:
 
@@ -313,49 +358,66 @@ def bus_detail(request,pk):
         print(vias)
         via_names=[]
         for a in vias:
-            via_names.append(a.place_name)
-        if request.session['start_city']==bus.start_city:
-            if request.session['destination_city']==bus.destination_city:
-                bookings=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+            via_names.append(a.place_name.lower())
+        if request.session['start_city'].lower()==bus.start_city.lower():
+
+            dates=bus_dates.objects.filter(bus=bus)
+            for d1 in dates:
+                if request.session['start_date']==str(d1.date.date()):
+                    request.session['bus_start_date']=str(d1.date.date())
+
+            if request.session['destination_city'].lower()==bus.destination_city.lower():
+                bookings=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=request.session['start_date'])
             else:
                 bookings=[]
                 for a in vias:
-                    if request.session['destination_city']==a.place_name:
+                    if request.session['destination_city'].lower()==a.place_name.lower():
                         vias=list(vias)
                         index=vias.index(a)
-                        booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+                        booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=request.session['start_date'])
                         for b in booking:
-                            if b.start_city in via_names[index:]:
+                            if b.start_city.lower() in via_names[index:]:
                                 pass
                             else:
                                 bookings.append(b)
-        elif request.session['destination_city']==bus.destination_city:
+        elif request.session['destination_city'].lower()==bus.destination_city.lower():
             bookings=[]
             for p in vias:
-                if request.session['start_city']==p.place_name:
+                if request.session['start_city'].lower()==p.place_name.lower():
+                    dates=bus_dates.objects.filter(bus=bus)
+                    for d1 in dates:
+                        if request.session['start_date']==(d1.date + timedelta(p.journeytime)).date():
+                            request.session['bus_start_date']=d1.date.date()
+
+
                     vias=list(vias)
                     index=vias.index(p)
-                    booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+                    booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=request.session['bus_start_date'])
                     for b in booking:
-                        if b.destination_city in via_names[:index+1]:
+                        if b.destination_city.lower() in via_names[:index+1]:
                             pass
                         else:
                             bookings.append(b)
         else:
             for p in vias:
-                if request.session['start_city']==p.place_name:
+                if request.session['start_city'].lower()==p.place_name.lower():
                     vias=list(vias)
                     index1=vias.index(p)
+                    dates=bus_dates.objects.filter(bus=bus)
+                    for d1 in dates:
+                        if request.session['start_date']==(d1.date + timedelta(p.journeytime)).date():
+                            request.session['bus_start_date']=d1.date.date()
+
             for q in vias:
-                if request.session['destination_city']==q.place_name:
+                if request.session['destination_city'].lower()==q.place_name.lower():
                     vias=list(vias)
                     index2=vias.index(q)
-            booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=bus.start.date())
+            booking=Bus_Booking.objects.filter(serviceno=pk,bus_start_date=request.session['bus_start_date'])
             for b in booking:
-                if b.start_city in via_names[:index1-1] or b.start_city==bus.start_city:
-                    if b.destination_city in via_names[:index1]:
+                if b.start_city.lower() in via_names[:index1-1] or b.start_city.lower()==bus.start_city.lower():
+                    if b.destination_city.lower() in via_names[:index1]:
                         pass
-                elif b.start_city in via_names[index2:]:
+                elif b.start_city.lower() in via_names[index2:]:
                     pass
                 else:
                     bookings.append(b)
@@ -392,9 +454,14 @@ def bus_detail(request,pk):
 
 def mybookings(request):
     bookings=Bus_Booking.objects.filter(user=request.user)
+    bookings=bookings[::-1]
+
     dicta={}
     for b in bookings:
         passengers=passenger.objects.filter(booking_id=b)
         dicta[b.booking_id]=passengers
     print(dicta)
     return render(request,'bus_booking/mybookings.html',{'bookings':bookings,'passengers':dicta})
+
+def busticket(request):
+    return render(request,'bus_booking/busticket.html')

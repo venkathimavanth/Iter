@@ -1,16 +1,197 @@
+{% extends 'bus_vendor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title></title>
+    {% block extrahead %}
+    <style media="screen">
+    .container1 {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container1 input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container1:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container1 input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container1 input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container1 .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+      #nava{
+        padding-left: 600px
+      }
+    </style>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> -->
+
+    <!-- Font Awesome -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
+
+    <!-- Moment.js -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script> -->
+
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" /> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script> -->
+<link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/static/bus_vendor/jquery.datetimepicker.css" / >
+
+<script src="http://127.0.0.1:8000/static/bus_vendor/jquery.js"></script>
+<script src="http://127.0.0.1:8000/static/bus_vendor/jquery.datetimepicker.full.min.js"></script>
+
+    {% endblock %}
   </head>
   <body>
-<form  method="post">
-  {% csrf_token%}
+    {% block body %}
+    <form method='POST' autocomplete="off" style="margin:5%">
+      {% csrf_token%}
+    <div class="container card" style="width:40%">
 
-  {{form}}
-<button type="submit">submit</button>  
+      <div class="row text-center">
+    <div class="col" style="margin-top:2%">
+      <h2>Add Available Dates</h2>
+    <hr>
+    </div>
+      </div>
+      *please set the time to bus start time*<br>
+      <div class="row">
+    <div class="col">
+      <div class="input-group date"  data-target-input="nearest">
+          <input style="width:100%;height:40px" id="datetimepicker1" type="{{form.fromdate.html_type}}" placeholder="      From Date" name="{{form.fromdate.html_name}}"  data-target="#datetimepicker1"/>
+          <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+
+          </div>
+      </div>
+    </div>
+      </div>
+    <br>
+    <div class="row">
+      <div class="col">
+        <label class="container1">monday
+        <input  type="checkbox"   name="{{form.monday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+        <label class="container1">Tuesday
+        <input  type="checkbox"  name="{{form.tuesday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+        <label class="container1">Wednesday
+        <input type="checkbox"  name="{{form.wednesday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+
+      </div>
+      <div class="col">
+        <label class="container1">Thursday
+        <input  type="checkbox"  name="{{form.thursday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+        <label class="container1">Friday
+        <input  type="checkbox"  name="{{form.friday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+        <label class="container1">Saturday
+        <input  type="checkbox"  name="{{form.saturday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+        <label class="container1">Sunday
+        <input  type="checkbox"  name="{{form.sunday.html_name}}" >
+        <span class="checkmark"></span></label><br>
+
+      </div>
+
+  </div>
+  <br>
+
+  <div class="row">
+    <div class="col">
+      <div class="input-group date"  data-target-input="nearest">
+          <input style="width:100%;height:40px"id="datetimepicker2" type="{{form.tilldate.html_type}}" placeholder="      Till Date" name="{{form.tilldate.html_name}}"  data-target="#datetimepicker2"/>
+          <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+
+          </div>
+      </div>
+
+    </div>
+
+    </div>
+  <br>
+    <button type="submit" class="btn btn-success" name="button">Add Dates</button>
+
+    <br>
+
+    </div>
 </form>
+
+    <script>
+          $('#datetimepicker1').datetimepicker(
+          {
+            format:'Y-m-d H:i',
+          }
+          );
+          $('#datetimepicker2').datetimepicker(
+          {
+            format:'Y-m-d H:i',
+          }
+          );
+    </script>
+
+{% endblock %}
+
 
 
   </body>

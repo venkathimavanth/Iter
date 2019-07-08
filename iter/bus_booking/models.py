@@ -55,6 +55,7 @@ class Bus(models.Model):
         reach=models.DateTimeField(null=True, blank=True)
         date=models.DateField()
         journeytime=models.IntegerField(null=True)
+
         def get_absolute_url(self):
             return reverse('bus_detail',kwargs={'id' : self.id})
 
@@ -74,7 +75,7 @@ class bus_dates(models.Model):
 
 
 class Bus_Booking(models.Model):
-        user=models.ForeignKey(User, on_delete=models.CASCADE)
+        user=models.ForeignKey(User,null=True, on_delete=models.CASCADE)
         bus_type=models.CharField(max_length=20)
         Bus_model=models.CharField(max_length=20,null=True)
         start_city=models.CharField(max_length=50)
@@ -84,6 +85,8 @@ class Bus_Booking(models.Model):
         reach=models.DateTimeField(null=True, blank=True)
         serviceno=models.ForeignKey(Bus,on_delete=models.CASCADE)
         booking_id=models.CharField(max_length=20,primary_key=True)
+        fare=models.FloatField(default='1000.0')
+        email=models.EmailField(default='koushiks666@gmail.com')
         phone_number = models.CharField(max_length=10,default='8179033301',
                                     validators=[
                                         RegexValidator(

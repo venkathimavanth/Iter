@@ -1,0 +1,42 @@
+{% load static %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% block extraheader %}
+    <meta charset="utf-8">
+    <title>Adding New Hotel</title>
+{% endblock %}
+
+  {% block body %}
+  <body>
+      <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script>
+        $(function(){
+            var time = 5;
+
+            function redirect(){
+              setTimeout(redirect,1000);
+              $(".timer").html(time)
+              if(time == 0)
+              {
+                  window.location.href = '{% url "hotel_vendor:home" %}'
+              }
+              time--;
+            }
+            redirect()
+          });
+        </script><br>
+      <center><img src="{% static "hotel_booking/images/7YUz.gif" %}" width="80px" height = "80px"></center>
+
+ {% if room %}
+     <center>  <h1>New room {{ room.room_type }} {{ room.room_fac }} has been added.
+  <br> You will be redirected to your homepage in <span class = "timer">0</span> seconds</h1></center><br><br><br>
+{% endif %}
+{% if hotel %}
+<center>  <h1>New hotel {{ hotel.name }},{{ hotel.city }} has been added.
+<br> You will be redirected to your homepage in <span class = "timer">0</span> seconds</h1></center><br><br><br>
+{% endif %}
+  </body>
+  {% endblock %}
+</html>

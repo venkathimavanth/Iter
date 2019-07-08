@@ -1,9 +1,15 @@
-{% extends 'user_authentication/base.html' %}
+{% extends 'user_authentication/base2.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+{% load mathfilters %}
 
 {% block extrahead %}
+<style media="screen">
+  #nava{
+    padding-left:600px
+  }
+</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,16 +17,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <link rel="stylesheet" href='{% static "hotel_booking/css/style3.css" %}'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700" rel="stylesheet">
 
 <!--  <link rel="stylesheet" href='{% static  "Blood_blog/css/bootstrap.css" %}'>-->
@@ -51,7 +53,12 @@
 <button class="button button3" type="button" data-toggle="modal" data-target="#mycomments">Comments</button>
 </div>
 <hr>
-<center><h1>{{ hotel.name }}</h1></center>
+<center>
+  <h1>{{ hotel.name }}
+  <span class="rating-static rating-{{ sum }}"></span>
+  </h1>
+</center>
+
 <!-- map -->
 <div class="modal fade" id="myModal" role="dialog">
 <div class="modal-dialog">
@@ -87,27 +94,32 @@
       <button type="button" class="close" data-dismiss="modal">&times;</button>
     </div>
     <div class="modal-body">
-    {% if cform %}
-      <form method="post">
-        {% if indi %}
-          <div id="contain">
-          <span><i class="fa fa-star" aria-hidden="true" id="1"onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
-          <span><i class="fa fa-star" aria-hidden="true" id="2"onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
-          <span><i class="fa fa-star" aria-hidden="true" id="3"onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
-          <span><i class="fa fa-star" aria-hidden="true" id="4"onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
-          <span><i class="fa fa-star" aria-hidden="true" id="5"onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
-          </div>
-          <input type="hidden" name="rating">
-          {{ cform.comment|as_crispy_field }}
-          <button type="button" name="button" value = "0" id="rating">post</button>
-        {% endif %}
+    {% if indi %}
+      {% if cform %}
+      <div class="container">
+        <form method="post">
+          {% csrf_token %}
+            <div id="contain">
+            <span><i class="fa fa-star" aria-hidden="true" id="1" onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
+            <span><i class="fa fa-star" aria-hidden="true" id="2" onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
+            <span><i class="fa fa-star" aria-hidden="true" id="3" onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
+            <span><i class="fa fa-star" aria-hidden="true" id="4" onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
+            <span><i class="fa fa-star" aria-hidden="true" id="5" onmouseenter="myFunction(this.id)" onclick="clickFunction(this.id)" onmouseleave="leaveFunction()"></i></span>
+            </div>
+            {{ cform.comment }}
+            <input type="hidden" name="rating" id="rating">
+            <button type="submit" name="button">post</button>
       </form>
       {% endif %}
+    {% endif %}
+      </div>
+      <h3>Comments</h3>
+
         {% if comments %}
           {% for comment in comments %}
             <ul>
-              <li>{{ comment.user.username }}</li>
-              <li>{{ comment.comment }}</li>
+              <li>User  : {{ comment.user.username }}</li>
+              <li>Review  :{{ comment.comment }}</li>
             </ul>
           {% endfor %}
         {% endif %}
@@ -163,59 +175,58 @@
   <th>No. of Persons</th>
   <th>Price/cost(after disc)</th>
   <th>Availability</th>
-  <th>Book Now</th>
+  <th>Status</th>
   {% if rooms %}
     {% for room in rooms %}
       <tr>
-        <td>{% ifequal room.room_type 1 %}
-              {% ifequal room.room_fac 0 %}
-                Suite Non-Ac
+        <td>{% ifequal room.room_type "Room" %}
+              {% ifequal room.room_fac "Non-AC" %}
+                Room Non-Ac
               {% else %}
-                Suite AC
+                Room AC
               {% endifequal %}
             {% endifequal %}
 
-              {% ifequal room.room_type 2 %}
-                {% ifequal room.room_fac 0 %}
-                    Deluxe Non-Ac
+              {% ifequal room.room_type "Standard Double Room" %}
+                {% ifequal room.room_fac "Non-Ac" %}
+                    Standard Double Room Non-Ac
                 {% else %}
-                    Deluxe AC
+                    Standard Double Room AC
                 {% endifequal %}
               {% endifequal %}
 
-              {% ifequal room.room_type 3 %}
-                {% ifequal room.room_fac 0 %}
-                  Standard Non-Ac
+              {% ifequal room.room_type "Standard Family Room" %}
+                {% ifequal room.room_fac "Non-Ac" %}
+                  Standard Family Room Non-Ac
                 {% else %}
-                  Standard AC
+                  Standard Family Room AC
                 {% endifequal %}
               {% endifequal %}
 
-              {% ifequal room.room_type 4 %}
-                {% ifequal room.room_fac 0 %}
-                  UltraDeluxe Non-Ac
+              {% ifequal room.room_type "Deluxe Double Room" %}
+                {% ifequal room.room_fac "Non-Ac" %}
+                  Deluxe Double Room Non-Ac
                 {% else %}
-                  UltraDeluxe AC
+                  Deluxe Double Room AC
                 {% endifequal %}
               {% endifequal %}
-
         </td>
-        <td>{{room.capacity}}</td>
+        <td>{{ room.capacity }}</td>
         <td>
           <p style="text-decoration:line-through">{{ room.price }}</p>
             {{ room.cost }}
         </td>
         <td>{{room.availability}}</td>
         <td>
-            {% ifequal room.availability 0%}
-              <button type="button" name="button" disabled class="htl-bookn-btn">Book Now</button>
+            {% ifnotequal room.availability 0%}
+              Available
             {% else %}
-              <button type="button" name="hotel_booking" class="htl-bookn-btn">Book now</button>
-            {% endifequal %}
+              Not-Available
+            {% endifnotequal %}
         </td>
       </tr>
     {% endfor %}
-  {% else %}
+    {% else %}
   <tr>
     <td> - </td>
     <td> - </td>
@@ -224,6 +235,11 @@
   </tr>
   {% endif %}
 </table>
+{% if rooms %}
+<a href='{% url "hotel_booking:Book" hotel.hotel_id %}'><button type="button" class="htl-bookn-btn">Book now</button></a>
+{% else %}
+<a href='{% url "hotel_booking:Book" hotel.hotel_id %}'><button type="button" class="htl-bookn-btn" disabled>Book now</button></a>
+{% endif %}
 </center>
 <br><br>
 
@@ -290,7 +306,7 @@
 
 <script>
 var s = 0;
-
+var inp = 0;
 function clickFunction(d) {
 
     s = d;
@@ -301,8 +317,8 @@ function clickFunction(d) {
             document.getElementById(i).style.color = "navy";
         }
     }
-    var inp = document.getElementById('rating');
-    inp.value = d;
+    document.getElementById('rating').value = s
+    console.log(document.getElementById('rating').value)
 }
 
 function myFunction(e) {
