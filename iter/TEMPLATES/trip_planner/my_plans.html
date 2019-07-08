@@ -1,0 +1,68 @@
+{% extends 'user_authentication/base2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block extrahead %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Iter</title>
+    <style media="screen">
+        input{}
+
+    </style>
+
+
+    {% endblock %}
+    </head>
+  <body>
+{% block body %}
+<br><br><br><br>
+<div class="w3-container">
+  <!-- Your Trip. Your Choosie !  Select The Best ITER -->
+  <center><h1><i class="fa fa-paw" aria-hidden="true"></i> MY ITER <i class="fa fa-paw" aria-hidden="true"></i></h1></center>
+<br>
+
+{% for mi in my_iters %}
+  <div class="w3-card-4" style="width:100%">
+    <header class="w3-container w3-light-grey" style="height:80px;padding:10px 50px 10px 50px">
+      <h3 style="float:left">{{mi.0}} , {{mi.1}}</h3>
+      <i class="fa fa-heartbeat" style="font-size:48px;color:red;float:right"></i>
+    </header>
+    <div class="w3-container" style="padding:30px 100px 20px 100px">
+      <p>{{mi.2}}</p>
+      <hr>
+      {% for v in mi.3 %}
+      {% if v.0 == 1 %}
+      <img src="/media/places/default.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:100px">
+      <p style="color:black">{{v.1}}</p><br>
+      {% endif %}
+      {% if v.0 == 2 %}
+      <a style="color:green;font-size:20px" href="#" target="_blank">{{v.1}}</a>
+      {% endif %}
+      {% if v.0 == 3 %}
+      <p >{{v.1}}</p><br>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <button class="w3-button w3-block w3-dark-grey"><i class="fa fa-minus-circler" aria-hidden="true" style="color:red"></i>REMOVE</button>
+  </div>
+  <br><br>
+{% endfor %}
+
+  <br><br>
+
+
+</div>
+<br><br><br><br><br><br><br><br>
+{% endblock %}
+
+
+  </body>
+</html>

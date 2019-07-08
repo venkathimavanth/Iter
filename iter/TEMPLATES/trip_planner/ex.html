@@ -1,0 +1,24 @@
+{% extends 'user_authentication/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% block extraheader %}
+{% endblock %}
+{% block body %}
+<body>
+<center>
+  <h1>When you select a city to travel, we show you some of the popular tourists sites in that city, from which
+  you can select the places you want to visit.</h1>
+  <h1>We also recommend you a hotel to stay based on your interest of places.</h1>
+    <select name="city">
+      <option>hyderabad</option>
+      <option>banglore</option>
+    </select>
+</center>
+</body>
+{% endblock %}
+</html>

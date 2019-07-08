@@ -1,0 +1,285 @@
+{% extends 'user_authentication/base2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block extrahead %}
+    <title>Iter</title>
+    <style media="screen">
+        input{}
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    img {
+      vertical-align: middle;
+    }
+
+    /* Position the image container (needed to position the left and right arrows) */
+    .container {
+      position: relative;
+    }
+
+    /* Hide the images by default */
+    .mySlides {
+      display: none;
+    }
+
+    /* Add a pointer when hovering over the thumbnail images */
+    .cursor {
+      cursor: pointer;
+    }
+
+    /* Next & previous buttons */
+    .prev,
+    .next {
+      cursor: pointer;
+      position: absolute;
+      top: 40%;
+      width: auto;
+      padding: 16px;
+      margin-top: -50px;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Position the "next button" to the right */
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    /* On hover, add a black background color with a little bit see-through */
+    .prev:hover,
+    .next:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Number text (1/3 etc) */
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 0;
+    }
+
+    /* Container for image text */
+    .caption-container {
+      text-align: center;
+      background-color: #222;
+      padding: 2px 16px;
+      color: white;
+    }
+
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* Six columns side by side */
+    .column {
+      float: left;
+      /* width: 16.66%; */
+    }
+
+    /* Add a transparency effect for thumnbail images */
+    .demo {
+      opacity: 0.5;
+    }
+
+    .active,
+    .demo:hover {
+      opacity: 1;
+    }
+    </style>
+    <style>
+    .button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: black;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      width:250px;
+    }
+
+
+    .button2 {background-color: #008CBA;} /* Blue */
+    .button3 {background-color: #f44336;} /* Red */
+    .button4 {background-color: #e7e7e7; color: black;} /* Gray */
+    .button5 {background-color: #555555;} /* Black */
+    </style>
+    {% endblock %}
+    </head>
+  <body>
+{% block body %}
+
+
+<br><br><br>
+  <h2 style="text-align:center">{{value}}</h2>
+<br>
+  <div class="container">
+    {% for p in places %}
+    <div class="mySlides">
+      <div class="numbertext">
+        <i><h6 style="color:black">{{p.Description}}</h6></i>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <button class="button" id="{{ forloop.counter }}" onclick="wishlist({{ forloop.counter }},'{{p.name}}')" value="Add To Visit-List">Add To Visit-List</button>
+        <!-- <button class="button button3" onclick="">Remove Form Wish-List</button> -->
+
+      </div>
+      <img src="/media/{{p.pic}}" style="width:100%;height:500px">
+    </div>
+    {% endfor %}
+
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+
+    <div class="caption-container">
+      <p id="caption"></p>
+    </div>
+
+    <center>
+    <div class="row">
+    {% for p in places %}
+    <div class="column">
+      <img class="demo cursor" src="/media/{{p.pic}}" style="width:{{image_width}}px;height:100px;float:right;padding: 0px 0px 0px 0px" onclick="currentSlide({{ forloop.counter }})" alt={{p.name}}>
+    </div>
+    {% endfor %}
+  </div></center>
+  </div>
+<br><br><br><br><br>
+
+<ul id="selectedplaces"></ul>
+
+<form method="POST" action="{% url 'trip_planner:trip_plan' %}">
+    {% csrf_token %}
+    <input type="text" id="final-list" name="final-list" value="" style="visibility: hidden;">
+    <i id="submit-disable" style="display:block">#Please select atleast 1 place to visit</i>
+    <input type="submit" id="final-list-submit" name="final-list-submit" value="Find My ITER" class="button button4" disabled>
+</form>
+
+<br><br><br><br><br><br><br><br><br>
+
+<script>
+
+function wishlist(id,name) {
+   // alert(document.getElementById(id).innerHTML)
+   if(document.getElementById(id).value == "Add To Visit-List"){
+     document.getElementById(id).style.background = "#f44336";
+     document.getElementById(id).value = "Remove From Visit-List";
+     document.getElementById(id).innerHTML="Remove From Visit-List";
+     addItem(id,name);
+     // console.log(name);
+}
+   else{
+     document.getElementById(id).style.background = "#4CAF50";
+     document.getElementById(id).value = "Add To Visit-List";
+     document.getElementById(id).innerHTML="Add To Visit-List";
+     removeItem(id,name);
+   }
+
+   var temp = ""
+   var ul = document.getElementById("selectedplaces");
+   var items = ul.getElementsByTagName("li");
+   for (var i = 0; i < items.length; ++i){
+     temp=temp + items[i].id + ',' ;
+   }
+   document.getElementById("final-list").value=temp
+
+   if(items.length==0)
+   {
+    document.getElementById("final-list-submit").disabled = true;
+    document.getElementById("final-list-submit").style.background = "#e7e7e7";
+    document.getElementById("submit-disable").style.display='block';
+    setTimeout(function () {
+        document.getElementById('submit-disable').style.display='none';
+    }, 2000);
+    }
+   else
+   {
+    document.getElementById("final-list-submit").disabled = false;
+    document.getElementById("final-list-submit").style.background = "#008CBA";
+    document.getElementById("submit-disable").style.display='none';
+     }
+
+}
+
+function addItem(id,name){
+    var ul = document.getElementById("selectedplaces");
+    var li = document.createElement("li");
+    var newid="selectedplace" + id ;
+    li.setAttribute('id',newid);
+    li.appendChild(document.createTextNode(name));
+    ul.appendChild(li);
+}
+
+function removeItem(id,name){
+    var ul = document.getElementById("selectedplaces");
+    var newid="selectedplace" + id ;
+    var item = document.getElementById(newid);
+    ul.removeChild(item);
+}
+
+</script>
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+
+
+{% endblock %}
+
+
+  </body>
+</html>

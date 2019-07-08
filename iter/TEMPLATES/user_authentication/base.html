@@ -51,7 +51,7 @@
 	          <li class="nav-item "><a href="{% url 'hotel_booking:hotels' %}" class="nav-link">Hotels</a></li>
 	          <!-- <li class="nav-item"><a href="places.html" class="nav-link">Places</a></li> -->
       {% if request.user.is_authenticated %}
-      <li class="nav-item"><a href="#" class="nav-link">Plan Trip</a></li>
+      <li class="nav-item"><a href="{% url 'trip_planner:trip_home' %}" class="nav-link">Plan Trip</a></li>
 
       <li class="nav-item dropdown">
            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +60,7 @@
            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
              <a class="dropdown-item" href="{% url 'bus_booking:mybookings' %}">Bus Bookings</a>
              <a class="dropdown-item" href="{% url 'hotel_booking:myhotelbookings' %}">Hotel Bookings</a>
-             <a class="dropdown-item" href="#">My trips</a>
+             <a class="dropdown-item" href="{% url 'trip_planner:my_plans' %}">My trips</a>
 
            </div>
          </li>
