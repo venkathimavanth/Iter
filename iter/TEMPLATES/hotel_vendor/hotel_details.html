@@ -208,16 +208,16 @@
           {{ info.name }}
         </td>
         <td>
-          {% ifequal info.gender|make-list|first "M" %}
+          {% ifequal info.gender|make_list|first "M" %}
             M
           {% endifequal%}
-          {% ifequal info.gender|make-list|first "m" %}
+          {% ifequal info.gender|make_list|first "m" %}
             M
           {% endifequal%}
-          {% ifequal info.gender|make-list|first "F" %}
+          {% ifequal info.gender|make_list|first "F" %}
             F
           {% endifequal%}
-          {% ifequal info.gender|make-list|first "f" %}
+          {% ifequal info.gender|make_list|first "f" %}
             F
           {% else %}
               Others

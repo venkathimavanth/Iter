@@ -19,6 +19,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from bus_booking.models import Bus_agency
+from hotel_booking.models import Hotels
 
 
 # Create your views here.
@@ -183,7 +184,7 @@ def user_login(request):
             x = Profile.objects.get(user=admin)
             if admin.is_active and x.user_type == 'H':
                 login(request,admin)
-                if Bus_agency.objects.filter(user=request.user):
+                if Hotels.objects.filter(user=request.user):
                     return HttpResponseRedirect("/hotel_vendor/home")
                 else:
                     return HttpResponseRedirect("/hotel_vendor/add_hotel")
@@ -192,10 +193,11 @@ def user_login(request):
                 return HttpResponseRedirect('hotel_vendor:hotels')
             elif admin.is_active and x.user_type == 'C':
                 login(request,admin)
+
                 #return HttpResponseRedirect(reverse('cus_login:home'))
                 #return render(request, 'user_authentication/home.html')
 
-                return HttpResponseRedirect("/busbooking/buses")
+                return redirect('bus_booking:buses')
             elif admin.is_active and x.user_type == 'B':
                 login(request,admin)
                 #return HttpResponseRedirect(reverse('cus_login:home'))
