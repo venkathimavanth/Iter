@@ -68,7 +68,7 @@ def hotel(request,pk):
             cform = Mycomments()
         return render(request,'hotel_booking/hotel_detail.html',{'sum':sum,'cform':cform,'hotel':hotel,'rooms':rooms,'images':images,'comments':comments,'user':user,'indi':indi})
 
-@login_required
+@login_required(login_url='user_authentication:user_login')
 def Book(request,pk):
     if pk:
         user = request.user
