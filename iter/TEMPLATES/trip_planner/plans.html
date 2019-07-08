@@ -1,4 +1,4 @@
-{% extends 'user_authentication/base.html' %}
+{% extends 'user_authentication/base2.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
@@ -49,7 +49,7 @@
       {% endif %}
       {% endfor %}
     </div>
-    <a class="w3-button w3-block w3-dark-grey" href={% url 'save_my_plan' 1 %}><i class="fa fa-tripadvisor" aria-hidden="true"></i> Add To My ITER-List</a>
+    <a class="w3-button w3-block w3-dark-grey" href={% url 'trip_planner:save_my_plan' 1 %}><i class="fa fa-tripadvisor" aria-hidden="true"></i> Add To My ITER-List</a>
   </div>
 
 
@@ -76,7 +76,7 @@
             {% endif %}
             {% endfor %}
           </div>
-          <a class="w3-button w3-block w3-dark-grey" href={% url 'save_my_plan' 2 %}><i class="fa fa-tripadvisor" aria-hidden="true"></i> Add To My ITER-List</a>
+          <a class="w3-button w3-block w3-dark-grey" href={% url 'trip_planner:save_my_plan' 2 %}><i class="fa fa-tripadvisor" aria-hidden="true"></i> Add To My ITER-List</a>
         </div>
 
 <br><br>
@@ -102,7 +102,7 @@
         {% endif %}
         {% endfor %}
       </div>
-      <a class="w3-button w3-block w3-dark-grey" href={% url 'save_my_plan' 3 %}><i class="fa fa-tripadvisor" aria-hidden="true"></i> Add To My ITER-List</a>
+      <a class="w3-button w3-block w3-dark-grey" href={% url 'trip_planner:save_my_plan' 3 %}><i class="fa fa-tripadvisor" aria-hidden="true"></i> Add To My ITER-List</a>
     </div>
 
 

@@ -1,4 +1,4 @@
-{% extends 'user_authentication/base.html' %}
+{% extends 'user_authentication/base2.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
@@ -137,9 +137,9 @@
 {% block body %}
 
 
-<br><br>
+<br><br><br>
   <h2 style="text-align:center">{{value}}</h2>
-
+<br>
   <div class="container">
     {% for p in places %}
     <div class="mySlides">
@@ -162,19 +162,21 @@
     <div class="caption-container">
       <p id="caption"></p>
     </div>
+
+    <center>
     <div class="row">
     {% for p in places %}
     <div class="column">
       <img class="demo cursor" src="/media/{{p.pic}}" style="width:{{image_width}}px;height:100px;float:right;padding: 0px 0px 0px 0px" onclick="currentSlide({{ forloop.counter }})" alt={{p.name}}>
     </div>
     {% endfor %}
+  </div></center>
   </div>
-</div>
 <br><br><br><br><br>
 
 <ul id="selectedplaces"></ul>
 
-<form method="POST" action="{% url 'trip_plan' %}">
+<form method="POST" action="{% url 'trip_planner:trip_plan' %}">
     {% csrf_token %}
     <input type="text" id="final-list" name="final-list" value="" style="visibility: hidden;">
     <i id="submit-disable" style="display:block">#Please select atleast 1 place to visit</i>

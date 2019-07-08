@@ -34,7 +34,8 @@ def my_plans(request):
             # print("hello")
         details.append(temp)
         my_iters.append(details)
-        print(my_iters)
+        # print(my_iters)
+        my_iters.reverse()
     context={"my_iters":my_iters}
     return render(request,'trip_planner/my_plans.html',context)
 
@@ -47,11 +48,11 @@ def save_my_plan(request,value):
     l=[]
     print(type(value))
     if value == '2':
-        plan="Relaxed ITER"
+        plan="Rushed ITER"
         days=t["rushed_days"]
         l=t["rushed_final_list"]
     elif value =='1':
-        plan="Rushed ITER"
+        plan="Relaxed ITER"
         days=t["cluster_days"]
         l=t["cluster_final_list"]
     elif value =='3':
