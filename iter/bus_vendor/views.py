@@ -219,12 +219,12 @@ def edit_agency(request):
             agency=Bus_agency.objects.get(user=request.user)
             form = agency_details(request.POST,instance=agency)
             if form.is_valid() :
+                print(form)
                 form.save()
 
-                messages.success(request, ('Your profile was successfully updated!'))
-                return redirect('user_authentication:edit_agency')
+                return redirect('bus_vendor:edit_agency')
             else:
-                messages.error(request, ('Please correct the error below.'))
+                print(form.errors)
         else:
             print('outside')
             agencys=Bus_agency.objects.get(user=request.user)
