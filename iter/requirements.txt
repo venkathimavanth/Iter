@@ -22,7 +22,7 @@ Click==7.0
 colorama==0.3.9
 constantly==15.1.0
 crypto==1.4.1
-cryptography==2.3.1
+cryptography==3.2
 cycler==0.10.0
 daphne==2.2.3
 decorator==4.3.0
