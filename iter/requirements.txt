@@ -121,7 +121,7 @@ python-gnupg==0.4.3
 pytz==2018.5
 pywin32==224
 pywinpty==0.5.4
-PyYAML==3.13
+PyYAML==5.4
 pyzmq==17.1.2
 qrcode==6.0
 qtconsole==4.4.1
