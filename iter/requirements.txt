@@ -90,7 +90,7 @@ MarkupSafe==1.0
 matplotlib==3.0.3
 mistune==0.8.3
 msgpack==0.5.6
-mysql-connector-python==8.0.12
+mysql-connector-python==8.0.14
 Naked==0.1.31
 nbconvert==5.3.1
 nbformat==4.4.0
