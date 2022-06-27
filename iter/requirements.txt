@@ -126,7 +126,7 @@ pyzmq==17.1.2
 qrcode==6.0
 qtconsole==4.4.1
 razorpay==1.1.1
-reportlab==3.5.12
+reportlab==3.5.55
 requests==2.20.1
 scikit-learn==0.20.2
 scipy==1.2.0
